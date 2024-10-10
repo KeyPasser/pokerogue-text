@@ -1,0 +1,22 @@
+#egg-list {
+    width:70%;
+
+
+    .eggs-container>* {
+        margin: 2px 8px;
+    }
+
+    .eggs-container {
+        flex: 1;
+        max-height: 300px;
+        overflow-y: auto;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .msg {
+        border-top: 1px solid #ccc;
+        display: flex;
+        flex-direction: column;
+    }
+}

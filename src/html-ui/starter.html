@@ -1,0 +1,165 @@
+<div class="selected-info">
+  <div class="cancel">
+  </div>
+  <div class="selected-list">
+    <div class="poke0"></div>
+    <div class="poke1"></div>
+    <div class="poke2"></div>
+    <div class="poke3"></div>
+    <div class="poke4"></div>
+    <div class="poke5"></div>
+  </div>
+  <div class="start-game">
+    <div class="poke-value-limit">0 / 10</div>
+    <div class="start">{{start}}</div>
+  </div>
+</div>
+<div class="filter">
+  <div class="gen-filter">
+    <div class="poke-gen-label"></div>
+    <select multiple="true" title="gen" class="gen">
+      <option value="ALL" selected>{{all}}</option>
+    </select>
+  </div>
+  <div class="type-filter">
+    <div class="poke-type-label"></div>
+    <select multiple="true" title="type" class="type">
+      <option value="ALL" selected>{{all}}</option>
+    </select>
+  </div>
+  <div class="captured-filter">
+    <div class="poke-captured-label"></div>
+    <select multiple="true" title="captured" class="captured">
+      <option value="ALL" selected>{{all}}</option>
+    </select>
+  </div>
+  <div class="collection">
+    <div title="unlock" class="unlock">
+      <div class="poke-unlock-label"></div>
+      <ul>
+        <select title="passive" class="passive">
+        </select>
+        <select title="cost" class="cost">
+        </select>
+      </ul>
+    </div>
+    
+    <div title="sort">
+      <div class="sort-label"></div>
+      <select title="sort" class="sort"></select>
+    </div>
+  </div>
+  <div title="misc">
+    <div class="misc-label"></div>
+    <ul class="misc"></ul>
+  </div>
+</div>
+<div class="body">
+  <div class="poke-info">
+    <div class="line1">
+      <div>No.<span class="poke-number"></span></div>
+      <div class="poke-name"></div>
+      
+      <button class="add-to-part">+</button>
+      <button class="remove-from-party">-</button>
+    </div>
+    <div class="scroller">
+      <div class="line3">
+        <div class="type-container">
+          <div class="type1 iconfont"></div>
+          <div class="type2 iconfont"></div>
+          <div class="type3 iconfont"></div>
+        </div>
+  
+        <div class="poke-gender"></div>
+        <div class="poke-type"></div>
+        <select title="shiny" class="poke-shiny"></select>
+  
+        <div class="info">
+          <div class="poke-luck-label"></div>
+          <div class="poke-luck"></div>
+        </div>
+      </div>
+      <div class="line2">
+        <div class="individual-count">
+          <div>
+            <div class="poke-candy-label"></div>
+            <div class="poke-candy"></div>
+          </div>
+          <div>
+            <div class="poke-hatched-label"></div>
+            <div class="poke-hatched"></div>
+          </div>
+  
+          <div>
+            <div class="poke-caught-label"></div>
+            <div class="poke-caught"></div>
+          </div>
+        </div>
+        <div>
+          <div class="poke-growth-label"></div>
+          <div class="poke-growth"></div>
+        </div>
+        <div>
+          <div class="poke-form-label"></div>
+          <div class="poke-form"></div>
+        </div>
+        <div class="ability">
+          <div class="poke-ability-label"></div>
+          <div class="poke-ability"></div>
+          <div class="poke-ability-desc"></div>
+        </div>
+        <div>
+          <div class="poke-passive-label"></div>
+          <div class="poke-passive"></div>
+        </div>
+        <div class="poke-passive-desc">
+        </div>
+        <div>
+          <div class="poke-nature-label"></div>
+          <select title="nature" class="poke-nature"></select>
+        </div>
+      </div>
+      <div class="ivs"></div>
+      <div class="move">
+        <div>
+          <div class="poke-moves-label"></div>
+          <div class="poke-moves"></div>
+        </div>
+        <div>
+          <div class="poke-egg-moves-label"></div>
+          <div class="poke-egg-moves"></div>
+        </div>
+      </div>
+      <div class="move-info">
+        <div class="name"></div>
+        <div class="type"></div>
+        <div>
+          <span>pp:</span>
+          <span class="pp">0/0</span>
+        </div>
+        <div id="description"></div>
+        <div id="details">
+          <div id="power">
+            <span></span>
+            <span>100</span>
+          </div>
+          <div id="accuracy">
+            <span></span>
+            <span>100</span>
+          </div>
+          <div id="category">
+            <span></span>
+            <span>威力</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <input id="search" type="text" placeholder="search" />
+    <div class="poke-list"></div>
+  </div>
+</div>
+
+<div class="msg"></div>

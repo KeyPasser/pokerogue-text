@@ -1,0 +1,19 @@
+#poke-info-container{
+    border:inset 1px #bbb;
+}
+#poke-info-line1,
+#poke-info-line2,
+#poke-info-line3{
+    display: flex;
+    flex-wrap: wrap;
+}
+#poke-info-line1,
+#poke-info-line2{
+    border-bottom: 1px solid #bbb;
+}
+
+#poke-info-line1 >*,
+#poke-info-line2 >*,
+#poke-info-line3 >*{
+    margin:0 8px;
+}

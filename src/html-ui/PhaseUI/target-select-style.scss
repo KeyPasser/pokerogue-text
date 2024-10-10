@@ -1,0 +1,15 @@
+.text-ui .h-targets{
+    display: flex;
+    flex-direction: column;
+    font-size: 1.3rem;
+    margin-top:0.5rem;
+    .targets{
+        gap:1rem;
+        display: flex;
+        margin-bottom:0.5rem;
+    }
+    .buttons{
+        gap:1rem;
+        display: flex;
+    }
+}

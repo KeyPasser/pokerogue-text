@@ -1,0 +1,135 @@
+.text-ui .poke-info {
+    margin-right: 8px;
+    display: flex;
+
+    border-bottom: 1px dashed #ccc;
+
+    &.player {
+        .left {
+            border-right: none;
+        }
+    }
+
+    .left {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        display: inline-block;
+        overflow: hidden;
+
+        .icon-pokeball{
+            color:var(--fg);
+            &.missing{
+                filter:opacity(0.58) blur(0.6px);
+            }
+        }
+        .poke-name {
+            max-width: 35%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .hpNumber {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            line-height: 12px;
+        }
+
+        >* {
+            display: flex;
+            >* {
+                text-align: center;
+            }
+        }
+    }
+    .line1{
+        gap:4px;
+    }
+    .line2 {
+        width: 100%;
+        height: 16px;
+        align-items: center;
+        line-height: 16px;
+        gap:4px;
+
+        &>*:not(:last-child) {
+            width: 12px;
+        }
+
+        .type-container {
+            width: 32px;
+            display: flex;
+            font-size: var(--font-size);
+
+            >* {
+                margin: 0 auto;
+            }
+        }
+
+        .poke-status {
+            height: 100%;
+            width: 16px;
+        }
+
+        .poke-hp {
+            --height: 12px;
+            flex: 1;
+            height: var(--height);
+            margin-right: 4px;
+            border: 1px solid #d1d1d1;
+            padding: 0;
+
+            .dividers {
+                display: flex;
+                height: 100%;
+                width: 100%;
+                position: relative;
+                top: calc(-1 * var(--height));
+                margin-left: -1px;
+                z-index: 1;
+
+                >div {
+                    flex: 1;
+                    border-right: 1px solid white;
+                }
+
+                >div.guad {
+                    border-right: 2px solid rgb(255, 198, 198);
+                }
+
+                >div:last-child {
+                    border-color: transparent;
+                }
+            }
+
+            .poke-percentage {
+                background-color: rgb(228, 228, 228);
+                height: 12px;
+
+                position: relative;
+                top: calc(-2 * var(--height));
+                width: 100%;
+            }
+        }
+    }
+
+    .player-poke {
+        height: 24px;
+
+        .battle-stat {
+            display: flex;
+            transform-origin: 0 0;
+
+            >* {
+                padding: 4px;
+                margin-right: 12px;
+            }
+        }
+
+        .hpNumber {
+            margin-left: auto;
+        }
+    }
+}

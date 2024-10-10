@@ -1,0 +1,40 @@
+#challenge-ui{
+    position:fixed;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: 80%;
+    top: 0;
+    left:0;
+    background-color: var(--bg);
+    align-items: center;
+    h1{
+        font-size: var(--font-size);
+        display: flex;
+        button{
+            margin-left: auto;
+        }
+    }
+    .body{
+        display: flex;
+        flex-direction: column;
+        label{
+            &>span{
+                width: 30%;
+                display: inline-block;
+            }
+            &:last-child{
+                display: flex;
+                button{
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width:400px){
+    #challenge-ui{
+        width: 100%;
+        height: 100%;
+    }
+}

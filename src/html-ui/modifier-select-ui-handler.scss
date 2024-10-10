@@ -1,0 +1,66 @@
+#modifier-select-ui-handler {
+  padding: 0;
+  width: 100%;
+
+  .body {
+    display: flex;
+    flex-direction: column-reverse;
+
+    >* {
+      padding: 0 8px;
+    }
+
+    .shops,
+    .buttons,
+    .rewards {
+      display: flex;
+      font-size: calc( var(--font-size) - .2rem);
+    }
+    .rewards>*{
+        margin-right: 16px;
+    }
+
+    .shops {
+      flex-direction: column;
+
+      option {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .cost {
+        font-size: calc( var(--font-size) - .5rem);
+      }
+
+      >* {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 4px;
+        font-size: calc( var(--font-size) - .3rem);
+
+        >* {
+          margin-right: 6px;
+          ;
+        }
+      }
+    }
+
+    .buttons {
+
+      >div:first-child {
+        display: flex;
+        flex-direction: column;
+      }
+
+      >* {
+        margin-right: 6px;
+        flex:1;
+      }
+    }
+
+    .msg {
+      border: 1px solid rgb(255, 174, 174);
+      margin-top: 1rem;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.voucher-ui{
+    display: flex;
+    flex-wrap: wrap;
+    gap:1%;
+    background-color: var(--bg);
+    .voucher-info{
+        width:30%;
+        margin-bottom: 8px;
+        &.unlocked{
+            opacity: 0.5;
+        }
+    }
+}

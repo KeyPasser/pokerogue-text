@@ -1,0 +1,998 @@
+diff --git a/.env.development b/.env.development
+index 6c92036..e5f462f 100644
+--- a/.env.development
++++ b/.env.development
+@@ -5,3 +5,4 @@ VITE_DISCORD_CLIENT_ID=1234567890
+ VITE_GOOGLE_CLIENT_ID=1234567890
+ VITE_I18N_DEBUG=1
+ VITE_PORT=8000
++VITE_MODE=text
+\ No newline at end of file
+diff --git a/.env.production b/.env.production
+index 65dc787..5e194db 100644
+--- a/.env.production
++++ b/.env.production
+@@ -1,6 +1,7 @@
+-VITE_BYPASS_LOGIN=0
++VITE_BYPASS_LOGIN=1
+ VITE_BYPASS_TUTORIAL=0
+ VITE_SERVER_URL=https://api.pokerogue.net
+ VITE_DISCORD_CLIENT_ID=1248062921129459756
+ VITE_GOOGLE_CLIENT_ID=955345393540-2k6lfftf0fdnb0krqmpthjnqavfvvf73.apps.googleusercontent.com
+-VITE_I18N_DEBUG=0
+\ No newline at end of file
++VITE_I18N_DEBUG=0
++VITE_MODE=text
+\ No newline at end of file
+diff --git a/index.html b/index.html
+index 390a29f..d1473b5 100644
+--- a/index.html
++++ b/index.html
+@@ -61,7 +61,8 @@
+ </head>
+ 
+ <body>
+-	<div id="app"></div>
++	<div id="appContainer">	<div id="app"></div></div>
++
+ 	<div id="touchControls">
+ 		<div class="left">
+ 			<div id="control-group-dpad" class="control-group control-group-dpad">
+@@ -143,6 +144,51 @@
+ 
+ 		</div>
+ 	</div>
++	<div id="op">
++		<script>
++			window.exportData = ()=>{
++				const data = localStorage.getItem("data_Guest");
++				const session = localStorage.getItem("sessionData_Guest");
++	
++				var formData = new FormData();
++				formData.append("save.data", new Blob([data], { type: "text/plain" }), "save.data");
++				formData.append("session.data", new Blob([session], { type: "text/plain" }), "session.data");
++		
++				fetch("/upload", {
++					method: 'POST',
++					body: formData
++				}).then((response) => {
++					document.querySelector("#save").style.color = "green";
++					setTimeout(()=>{
++						document.querySelector("#save").style.color = "black";
++					}, 1000);
++				});
++
++
++			}
++			var uploadTask;
++			var startSaveInterval = window.startSaveInterval = ()=>{
++				if(uploadTask)return;
++				uploadTask = setInterval(()=>{
++					//exportData();
++				}, 1000 * 30);
++			}
++			document.addEventListener("keydown",startSaveInterval);
++			document.addEventListener("pointerdown",startSaveInterval);
++
++			var setFilter = () => {
++				const filter = document.querySelector("#app").style.filter;
++				if(filter == "none"){
++					document.querySelector("#app").style.filter = "grayscale(1) contrast(30%) invert(1)";
++				}else{
++					document.querySelector("#app").style.filter = "none";
++				}
++			}
++		</script>
++		<button id="reset">重置</button>
++		<button id="save" onclick="exportData()">上载</button>
++		<button id="color" onclick="setFilter()">彩色</button>
++	</div>
+ 	<script type="module" src="./src/main.ts"></script>
+ 	<script src="./src/touch-controls.ts" type="module"></script>
+ 	<script src="./src/debug.js" type="module"></script>
+diff --git a/package.json b/package.json
+index 3741801..babd9eb 100644
+--- a/package.json
++++ b/package.json
+@@ -5,7 +5,7 @@
+ 	"type": "module",
+ 	"scripts": {
+ 		"start": "vite",
+-		"start:dev": "vite --mode development",
++		"start:dev": "vite --host --mode development",
+ 		"build": "vite build",
+ 		"build:beta": "vite build --mode beta",
+ 		"preview": "vite preview",
+@@ -14,55 +14,47 @@
+ 		"test:watch": "vitest run --project pre && vitest watch --project main --coverage",
+ 		"test:silent": "vitest run --project pre && vitest run --project main --silent",
+ 		"typecheck": "tsc --noEmit",
+-		"eslint": "eslint --fix .",
+-		"eslint-ci": "eslint .",
+ 		"docs": "typedoc",
+ 		"depcruise": "depcruise src",
+ 		"depcruise:graph": "depcruise src --output-type dot | node dependency-graph.js > dependency-graph.svg",
+-		"create-test": "node ./create-test-boilerplate.js"
++		"post:build": "node post-build.js"
+ 	},
+ 	"devDependencies": {
+-		"@eslint/js": "^9.3.0",
+ 		"@hpcc-js/wasm": "^2.18.0",
+-		"@stylistic/eslint-plugin-ts": "^2.6.0-beta.0",
+ 		"@types/jsdom": "^21.1.7",
+ 		"@types/node": "^20.12.13",
+-		"@typescript-eslint/eslint-plugin": "^8.0.0-alpha.54",
+-		"@typescript-eslint/parser": "^8.0.0-alpha.54",
+ 		"@vitest/coverage-istanbul": "^2.0.4",
+ 		"dependency-cruiser": "^16.3.10",
+-		"eslint": "^9.7.0",
+-		"eslint-plugin-import-x": "^4.2.1",
+-		"inquirer": "^11.0.2",
+ 		"jsdom": "^24.0.0",
+ 		"lefthook": "^1.6.12",
+-		"msw": "^2.4.9",
+ 		"phaser3spectorjs": "^0.0.8",
++		"rollup-plugin-visualizer": "^5.12.0",
++		"sass": "^1.78.0",
+ 		"typedoc": "^0.26.4",
+ 		"typescript": "^5.5.3",
+-		"typescript-eslint": "^8.0.0-alpha.54",
+-		"vite": "^5.3.5",
++		"vite": "^5.4.2",
++		"vite-plugin-commonjs": "^0.10.1",
+ 		"vite-tsconfig-paths": "^4.3.2",
+ 		"vitest": "^2.0.4",
+ 		"vitest-canvas-mock": "^0.3.3"
+ 	},
+ 	"dependencies": {
+ 		"@material/material-color-utilities": "^0.2.7",
++		"busboy": "^1.6.0",
+ 		"crypto-js": "^4.2.0",
+ 		"i18next": "^23.11.1",
+ 		"i18next-browser-languagedetector": "^7.2.1",
+ 		"i18next-korean-postposition-processor": "^1.0.0",
+ 		"json-stable-stringify": "^1.1.0",
+ 		"phaser": "^3.70.0",
+-		"phaser3-rex-plugins": "^1.1.84"
+-	},
+-	"engines": {
+-		"node": ">=20.0.0"
++		"phaser3-rex-plugins": "^1.1.84",
++		"pokemon-rogue-battle": "file:"
+ 	},
+ 	"imports": {
+ 		"#enums/*": "./enums/*",
+ 		"#app": "./src/main.js",
+ 		"#app/*": "./src/*",
+-		"#test/*": "./src/test/*"
++		"#test/*": "./src/test/*",
++		"phaser": "./src/phaserInterface/index.ts"
+ 	}
+ }
+diff --git a/src/data/battle-anims.ts b/src/data/battle-anims.ts
+index 62ef811..3d8fbb3 100644
+--- a/src/data/battle-anims.ts
++++ b/src/data/battle-anims.ts
+@@ -927,8 +927,8 @@ export abstract class BattleAnim {
+             targetSprite.setVisible(false);
+           }
+ 
+-          const spriteFrames = anim!.frames[f]; // TODO: is the bang correcT?
+-          const frameData = this.getGraphicFrameData(scene, anim!.frames[f], onSubstitute); // TODO: is the bang correct?
++          const spriteFrames = anim?anim.frames[f]:[]; // TODO: is the bang correcT?
++          const frameData = anim?this.getGraphicFrameData(scene, anim!.frames[f], onSubstitute):{}; // TODO: is the bang correct?
+           let u = 0;
+           let t = 0;
+           let g = 0;
+@@ -1329,6 +1329,7 @@ export class EncounterBattleAnim extends BattleAnim {
+ 
+     this.encounterAnim = encounterAnim;
+     this.oppAnim = oppAnim ?? false;
++    this.playRegardlessOfIssues = false;
+   }
+ 
+   getAnim(): AnimConfig | null {
+diff --git a/src/field/pokemon.ts b/src/field/pokemon.ts
+index 07525e9..de3003d 100644
+--- a/src/field/pokemon.ts
++++ b/src/field/pokemon.ts
+@@ -390,6 +390,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
+   abstract getBattlerIndex(): BattlerIndex;
+ 
+   loadAssets(ignoreOverride: boolean = true): Promise<void> {
++    if((this.scene as any).textPlugin)return Promise.resolve();
++    
+     return new Promise(resolve => {
+       const moveIds = this.getMoveset().map(m => m!.getMove().id); // TODO: is this bang correct?
+       Promise.allSettled(moveIds.map(m => initMoveAnim(this.scene, m)))
+diff --git a/src/main.ts b/src/main.ts
+index b5f813b..0a614fc 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -1,12 +1,15 @@
+ import Phaser from "phaser";
++import { HTMLContainer } from "./html-ui/Root";
++import TextBattleScene, { getProxy, HLoadingScene } from "./html-ui/text-battle-scene";
+ import BattleScene from "./battle-scene";
++
+ import InvertPostFX from "./pipelines/invert";
+ import { version } from "../package.json";
+-import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
+-import BBCodeTextPlugin from "phaser3-rex-plugins/plugins/bbcodetext-plugin";
+-import InputTextPlugin from "phaser3-rex-plugins/plugins/inputtext-plugin";
+-import TransitionImagePackPlugin from "phaser3-rex-plugins/templates/transitionimagepack/transitionimagepack-plugin";
++
+ import { LoadingScene } from "./loading-scene";
++import EventEmitter from "phaser3-rex-plugins/plugins/utils/eventemitter/EventEmitter";
++import { Math } from "phaser";
++import { getPokeTypeColor } from "./html-ui/util";
+ 
+ 
+ // Catch global errors and display them in an alert so users can report the issue.
+@@ -34,24 +37,7 @@ const config: Phaser.Types.Core.GameConfig = {
+     mode: Phaser.Scale.FIT
+   },
+   plugins: {
+-    global: [{
+-      key: "rexInputTextPlugin",
+-      plugin: InputTextPlugin,
+-      start: true
+-    }, {
+-      key: "rexBBCodeTextPlugin",
+-      plugin: BBCodeTextPlugin,
+-      start: true
+-    }, {
+-      key: "rexTransitionImagePackPlugin",
+-      plugin: TransitionImagePackPlugin,
+-      start: true
+-    }],
+-    scene: [{
+-      key: "rexUI",
+-      plugin: UIPlugin,
+-      mapping: "rexUI"
+-    }]
++
+   },
+   input: {
+     mouse: {
+@@ -66,20 +52,89 @@ const config: Phaser.Types.Core.GameConfig = {
+     createContainer: true
+   },
+   pixelArt: true,
+-  pipeline: [ InvertPostFX ] as unknown as Phaser.Types.Core.PipelineConfig,
+-  scene: [ LoadingScene, BattleScene ],
+-  version: version
++  pipeline: [InvertPostFX] as unknown as Phaser.Types.Core.PipelineConfig,
++  // scene: [LoadingScene],
++  version: version,
++  fps: {
++    limit: 30
++  },
+ };
+ 
+ /**
+  * Sets this object's position relative to another object with a given offset
++ * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
++ * @param x The relative x position
++ * @param y The relative y position
+  */
+-const setPositionRelative = function (guideObject: Phaser.GameObjects.GameObject, x: number, y: number) {
++const setPositionRelative = function (guideObject: any, x: number, y: number) {
+   const offsetX = guideObject.width * (-0.5 + (0.5 - guideObject.originX));
+   const offsetY = guideObject.height * (-0.5 + (0.5 - guideObject.originY));
+   this.setPosition(guideObject.x + offsetX + x, guideObject.y + offsetY + y);
+ };
+ 
++declare module "phaser" {
++  namespace GameObjects {
++    interface Container {
++      /**
++       * Sets this object's position relative to another object with a given offset
++       * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
++       * @param x The relative x position
++       * @param y The relative y position
++       */
++      setPositionRelative(guideObject: any, x: number, y: number): void;
++    }
++    interface Sprite {
++      /**
++       * Sets this object's position relative to another object with a given offset
++       * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
++       * @param x The relative x position
++       * @param y The relative y position
++       */
++      setPositionRelative(guideObject: any, x: number, y: number): void;
++    }
++    interface Image {
++      /**
++       * Sets this object's position relative to another object with a given offset
++       * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
++       * @param x The relative x position
++       * @param y The relative y position
++       */
++      setPositionRelative(guideObject: any, x: number, y: number): void;
++    }
++    interface NineSlice {
++      /**
++       * Sets this object's position relative to another object with a given offset
++       * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
++       * @param x The relative x position
++       * @param y The relative y position
++       */
++      setPositionRelative(guideObject: any, x: number, y: number): void;
++    }
++    interface Text {
++      /**
++       * Sets this object's position relative to another object with a given offset
++       * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
++       * @param x The relative x position
++       * @param y The relative y position
++       */
++      setPositionRelative(guideObject: any, x: number, y: number): void;
++    }
++    interface Rectangle {
++      /**
++       * Sets this object's position relative to another object with a given offset
++       * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
++       * @param x The relative x position
++       * @param y The relative y position
++       */
++      setPositionRelative(guideObject: any, x: number, y: number): void;
++    }
++    interface Container {
++      moveAbove(dom: any, dom2: any): void;
++      sendToBack(dom: any): void;
++    }
++  }
++}
++
+ Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
+ Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative;
+ Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative;
+@@ -87,23 +142,332 @@ Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative
+ Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
+ Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
+ 
++
+ document.fonts.load("16px emerald").then(() => document.fonts.load("10px pkmnems"));
+ 
+ let game;
+ 
+-const startGame = () => {
++const noPhase = () => {
++  Math.RND = new Phaser.Math.RandomDataGenerator();
++
++  const game = {
++    events: new EventEmitter,
++    input: {},
++    canvas: document.createElement('canvas'),
++    domContainer: document.createElement('div'),
++    renderer: {
++      maxTextures: 1000,
++      gl: {},
++      pipelines: {
++        add: () => { }
++      }
++    },
++    config,
++  } as any
++  const input = {} as any
++  const textures = {
++    get:()=>{
++      return {
++        frames:new Proxy({},{
++          get:(target,prop)=>{
++            return {
++              cutX:0,
++              cutY:0,
++              width:1,
++              height:1,
++            }
++          }
++        }),
++        firstFrame:0,
++        getSourceImage:()=>{
++          return document.createElement('img')
++        }
++      }
++    }
++  } as any
++  const time = {
++    addEvent({
++      callback,
++      delay,
++      repeat
++    }) {
++      let repeatCount = 0;
++
++      const ret = {
++        repeatCount: repeat,
++        destroy: () => {
++          clearInterval(interval)
++        }
++      };
++
++      const interval = setInterval(() => {
++        callback()
++        repeatCount = ret.repeatCount--;
++        if (!repeatCount) {
++          clearInterval(interval)
++        }
++      }, delay / 10 || 0);
++
++      return ret
++    },
++    delayedCall: (t, c) => {
++      c?.()
++    }
++  } as any
++  const anims = {
++    frames:[],
++    generateFrameNames: () => { },
++    create: () => { },
++    exists: () => true,
++    get: () => false
++  } as any
++  const sound = {
++    get: () => {
++      return {
++        stop: () => { },
++        totalDuration: 0,
++        destroy: () => { },
++        manager: {
++          game: {}
++        },
++        setVolume: () => { }
++      }
++    },
++    play: () => {
++      return {
++        stop: () => { },
++        totalDuration: 0,
++        destroy: () => { }
++      }
++    },
++    getAllPlaying: () => []
++  } as any;
++  const make = {
++    rexTransitionImagePack: () => { }
++  } as any
++
++  const add = {
++    image: () => new HTMLContainer,
++    container: () => new HTMLContainer,
++    rectangle: () => new HTMLContainer,
++    existing: () => new HTMLContainer,
++    text: () => new HTMLContainer,
++    polygon: () => new HTMLContainer,
++    video: () => new HTMLContainer,
++  } as any
++
++
++  const tweens = {
++    add: ({ onComplete }) => {
++      onComplete?.()
++    },
++    addCounter: ({
++      onUpdate,
++      onRepeat,
++      repeat = 1,
++      repeatDelay,
++      onComplete,
++      from = 0,
++      to = 1
++    }) => {
++      if(repeat<1)repeat = 1;
++
++      let count = from;
++      const interval = setInterval(() => {
++        onUpdate?.({
++          getValue: () => count
++        });
++
++        onRepeat?.()
++
++        count++;
++        if (count == repeat * (to - from)) {
++          clearInterval(interval)
++          onComplete?.()
++        }
++      }, repeatDelay)
++
++
++      return {
++        remove: () => {
++          clearInterval(interval)
++        },
++        stop: () => {
++          clearInterval(interval)
++        }
++      }
++    },
++    getTweensOf: () => {
++      return []
++    },
++    chain:()=>{
++
++    }
++  } as any
++  const scene = {
++    remove: (k) => { }
++  } as any;
++
++  const load = {
++    setBaseURL: () => { },
++    audio: () => { },
++    bitmapFont: () => { },
++    video: () => { },
++    on: () => { },
++    off: () => { },
++    plugin: () => { },
++    atlas: () => { },
++    once: (type, callback) => {
++      callback();
++    },
++    spritesheet: () => { },
++    image: () => { },
++    isLoading: () => true,
++  } as any;
++
++  const sys = {
++    queueDepthSort: () => { }
++  } as any
++
++  const cameras = {
++    main: {
++      setPostPipeline: () => { },
++      removePostPipeline: () => { }
++    }
++  } as any;
++
++  const loading = new HLoadingScene()
++  loading.game = game;
++  loading.scene = scene;
++  loading.load = load;
++  loading.preload()
++
++  const textBS = new TextBattleScene();
++  textBS.game = game;
++  textBS.load = load;
++  textBS.scene = scene;
++  textBS.time = time;
++  textBS.tweens = tweens;
++  textBS.input = input;
++  textBS.add = add;
++  textBS.anims = anims;
++  textBS.make = make;
++  textBS.sound = sound;
++  textBS.sys = sys;
++  textBS.cameras = cameras;
++  textBS.textures = textures;
++  textBS.renderer = game.renderer;
++
++  textBS.preload()
++  textBS.create()
++
++  textBS.launchBattle();
++
++  return textBS
++}
++
++const startPhase = async () => {
++
++  const UIPlugin = await import("phaser3-rex-plugins/templates/ui/ui-plugin");
++  const BBCodeTextPlugin = await import("phaser3-rex-plugins/plugins/bbcodetext-plugin");
++  const InputTextPlugin = await import("phaser3-rex-plugins/plugins/inputtext-plugin.js");
++  const TransitionImagePackPlugin = await import("phaser3-rex-plugins/templates/transitionimagepack/transitionimagepack-plugin.js");
++
++  //@ts-ignore
++  config.plugins.global = [{
++    key: "rexInputTextPlugin",
++    plugin: InputTextPlugin.default,
++    start: true
++  }, {
++    key: "rexBBCodeTextPlugin",
++    plugin: BBCodeTextPlugin.default,
++    start: true
++  }, {
++    key: "rexTransitionImagePackPlugin",
++    plugin: TransitionImagePackPlugin.default,
++    start: true
++  }]
++  //@ts-ignore
++  config.plugins.scene = [{
++    key: "rexUI",
++    plugin: UIPlugin.default,
++    mapping: "rexUI"
++  }]
++
+   game = new Phaser.Game(config);
+   game.sound.pauseOnBlur = false;
++  const originSound = game.sound;
++
++  game.sound = new Proxy(originSound, {
++    get: function (target, prop) {
++      if (prop == 'get') {
++        return (...args) => {
++          const s = target[prop].apply(target, args);
++          return getProxy(s);
++        };
++      } else {
++        return target[prop];
++      }
++    }
++  });
++}
++
++
++const startGame = async () => {
++
++  let text = import.meta.env.VITE_MODE === "text";
++
++  if (text) {
++    config.fps = { limit: 20 };
++  }
++
++  localStorage.setItem(`tutorials`, JSON.stringify({ "INTRO": true, "ACCESS_MENU": true, "MENU": true, "STARTER_SELECT": true, "POKERUS": true, "STAT_CHANGE": true, "SELECT_ITEM": true, "EGG_GACHA": true }));
++  localStorage.setItem(`settings`, JSON.stringify({ "PLAYER_GENDER": 0, "GAME_SPEED": 5, "HP_BAR_SPEED": 3, "EXP_GAINS_SPEED": 3, "EXP_PARTY_DISPLAY": 2, "SKIP_SEEN_DIALOGUES": 1, "ENABLE_RETRIES": 1, "TUTORIALS": 0, "DAMAGE_NUMBERS": 1, "MOVE_ANIMATIONS": 0, "SHOW_LEVEL_UP_STATS": 0, "SPRITE_SET": 1, "MASTER_VOLUME": 0, "BGM_VOLUME": 0, "SE_VOLUME": 0 }));
++
++  let scene;
++  if (text) {
++    config.scene = [HLoadingScene, TextBattleScene]
++    document.body.classList.add("textOnly");
++    scene = noPhase()
++  } else {
++    config.scene = [LoadingScene, BattleScene]
++    await startPhase()
++    scene = game.scene.scenes[0]
++  }
++  
++  document.querySelector("#reset")?.addEventListener('click', () => {
++    scene.reset(true)
++  })
++
++  //@ts-ignore
++  window.scene = scene; 
+ };
++Promise.all([
++  // fetch("session.data")
++  //   .then((response) => response.text()),
+ 
+-fetch("/manifest.json")
+-  .then(res => res.json())
+-  .then(jsonResponse => {
+-    startGame();
+-    game["manifest"] = jsonResponse.manifest;
+-  }).catch(() => {
+-    // Manifest not found (likely local build)
++  // fetch("save.data")
++  //   .then((response) => response.text())
++
++]).then(([session = "", save = ""]) => {
++
++  if (!session || session == "null") {
+     startGame();
+-  });
++    return;
++  }
++
++  const oldData = localStorage.getItem(`data_Guest`) || btoa("{}");
++  
++
++  const oldWave = (JSON.parse(atob(oldData)).gameStats || {playTime:0}).playTime || 0;
++  const newWave = JSON.parse(atob(save)).gameStats.playTime;
++
++  if (oldWave < newWave) {
++    localStorage.setItem(`sessionData_Guest`, session)
++    save && localStorage.setItem(`data_Guest`, save)
++  }
++
++  startGame();
++});
+ 
+ export default game;
+diff --git a/src/phases/egg-lapse-phase.ts b/src/phases/egg-lapse-phase.ts
+index c251819..e088ae1 100644
+--- a/src/phases/egg-lapse-phase.ts
++++ b/src/phases/egg-lapse-phase.ts
+@@ -9,6 +9,7 @@ import { achvs } from "#app/system/achv";
+ import { PlayerPokemon } from "#app/field/pokemon";
+ import { EggSummaryPhase } from "./egg-summary-phase";
+ import { EggHatchData } from "#app/data/egg-hatch-data";
++import ExtendLapsPhase from "#app/html-ui/phases/egg-lapse-phase.js";
+ 
+ /**
+  * Phase that handles updating eggs, and hatching any ready eggs
+@@ -19,6 +20,8 @@ export class EggLapsePhase extends Phase {
+   private eggHatchData: EggHatchData[] = [];
+   private readonly minEggsToSkip: number = 2;
+   constructor(scene: BattleScene) {
++    if((scene as any).textPlugin&&!arguments[1])
++      return new (ExtendLapsPhase(EggLapsePhase))(scene);
+     super(scene);
+   }
+ 
+diff --git a/src/phases/scan-ivs-phase.ts b/src/phases/scan-ivs-phase.ts
+index 5ec61d5..d7b270d 100644
+--- a/src/phases/scan-ivs-phase.ts
++++ b/src/phases/scan-ivs-phase.ts
+@@ -49,19 +49,19 @@ export class ScanIvsPhase extends PokemonPhase {
+     }
+ 
+     if (!this.scene.hideIvs) {
+-      this.scene.ui.showText(i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }), null, () => {
+-        this.scene.ui.setMode(Mode.CONFIRM, () => {
++      // this.scene.ui.showText(i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }), null, () => {
++      //   this.scene.ui.setMode(Mode.CONFIRM, () => {
+           this.scene.ui.setMode(Mode.MESSAGE);
+           this.scene.ui.clearText();
+           new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(this.scene, false, () => {
+             this.scene.ui.getMessageHandler().promptIvs(pokemon.id, pokemon.ivs, this.shownIvs).then(() => this.end());
+           });
+-        }, () => {
+-          this.scene.ui.setMode(Mode.MESSAGE);
+-          this.scene.ui.clearText();
+-          this.end();
+-        });
+-      });
++      //   }, () => {
++      //     this.scene.ui.setMode(Mode.MESSAGE);
++      //     this.scene.ui.clearText();
++      //     this.end();
++      //   });
++      // });
+     } else {
+       this.end();
+     }
+diff --git a/src/scene-base.ts b/src/scene-base.ts
+index 298b809..2d51d53 100644
+--- a/src/scene-base.ts
++++ b/src/scene-base.ts
+@@ -14,6 +14,7 @@ export class SceneBase extends Phaser.Scene {
+     width: 1920 / 6,
+     height: 1080 / 6
+   };
++  public lazyLoadResource = false;
+   constructor(config?: string | Phaser.Types.Scenes.SettingsConfig) {
+     super(config);
+   }
+@@ -30,6 +31,7 @@ export class SceneBase extends Phaser.Scene {
+   }
+ 
+   loadImage(key: string, folder: string, filename?: string) {
++    if(this.lazyLoadResource)return;
+     if (!filename) {
+       filename = `${key}.png`;
+     }
+@@ -42,6 +44,7 @@ export class SceneBase extends Phaser.Scene {
+   }
+ 
+   loadSpritesheet(key: string, folder: string, size: integer, filename?: string) {
++    if(this.lazyLoadResource)return;
+     if (!filename) {
+       filename = `${key}.png`;
+     }
+@@ -54,6 +57,7 @@ export class SceneBase extends Phaser.Scene {
+   }
+ 
+   loadAtlas(key: string, folder: string, filenameRoot?: string) {
++    if(this.lazyLoadResource)return;
+     if (!filenameRoot) {
+       filenameRoot = key;
+     }
+@@ -69,6 +73,7 @@ export class SceneBase extends Phaser.Scene {
+   }
+ 
+   loadSe(key: string, folder?: string, filenames?: string | string[]) {
++    if(this.lazyLoadResource)return;
+     if (!filenames) {
+       filenames = `${key}.wav`;
+     }
+@@ -86,6 +91,7 @@ export class SceneBase extends Phaser.Scene {
+   }
+ 
+   loadBgm(key: string, filename?: string) {
++    if(this.lazyLoadResource)return;
+     if (!filename) {
+       filename = `${key}.mp3`;
+     }
+diff --git a/src/ui/battle-info.ts b/src/ui/battle-info.ts
+index b3474be..13076a7 100644
+--- a/src/ui/battle-info.ts
++++ b/src/ui/battle-info.ts
+@@ -7,6 +7,8 @@ import { StatusEffect } from "../data/status-effect";
+ import BattleScene from "../battle-scene";
+ import { Type, getTypeRgb } from "../data/type";
+ import { getVariantTint } from "#app/data/variant";
++import { HPokeBattleInfo } from "#app/html-ui/battle-info";
++import { getRootContainer } from "#app/html-ui/Root";
+ import { Stat } from "#enums/stat";
+ import BattleFlyout from "./battle-flyout";
+ import { WindowVariant, addWindow } from "./ui-theme";
+@@ -817,12 +819,17 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
+ 
+ export class PlayerBattleInfo extends BattleInfo {
+   constructor(scene: Phaser.Scene) {
+-    super(scene, Math.floor(scene.game.canvas.width / 6) - 10, -72, true);
+-  }
++    if((scene as any).textPlugin)
++      return new HPokeBattleInfo(scene as any, 0, 0, true, getRootContainer(scene).find("#player-pokes") as HTMLDivElement) as any;
++
++    super(scene, Math.floor(scene.game.canvas.width / 6) - 10, -72, true);  }
+ }
+ 
+ export class EnemyBattleInfo extends BattleInfo {
+   constructor(scene: Phaser.Scene) {
++    if((scene as any).textPlugin) {
++      return new HPokeBattleInfo(scene as any, 0, 0, false, getRootContainer(scene).find("#enemies") as HTMLDivElement) as any;
++    }
+     super(scene, 140, -141, false);
+   }
+ 
+diff --git a/vite.config.ts b/vite.config.ts
+index 946315c..b248f25 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -1,37 +1,145 @@
+-import { defineConfig, loadEnv, Rollup, UserConfig } from 'vite';
++import { defineConfig, loadEnv } from 'vite';
+ import tsconfigPaths from 'vite-tsconfig-paths';
+ import { minifyJsonPlugin } from "./src/plugins/vite/vite-minify-json-plugin";
++import fs from 'fs';
++import Busboy from 'busboy';
++import { join } from 'path';
++import { visualizer } from "rollup-plugin-visualizer";
+ 
+-export const defaultConfig: UserConfig  = {
++function resolve(path: string) {
++	return join(__dirname, path);
++}
++
++function savePlugin() {
++	return {
++		name: 'transform-file',
++
++		configureServer(server) {
++			server.middlewares.use((req, res, next) => {
++				if (req.url === '/save.data')
++					res.body = fs.createReadStream("./public/save.data");
++				if (req.url === '/session.data')
++					res.body = fs.createReadStream("./public/session.data");
++				if (req.url === '/upload') {
++					console.log(new Date().toString().substring(16, 25));
++
++					if (fs.existsSync("./public/save.data"))
++						fs.truncateSync("./public/save.data");
++					if (fs.existsSync("./public/session.data"))
++						fs.truncateSync("./public/session.data");
++
++					const busboy = Busboy({ headers: req.headers });
++
++					busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
++						file.on('data', data => fs.writeFileSync("./public/" + fieldname, data, {
++							flag: 'a'
++						}));
++						file.on('end', () => console.log(`File [${fieldname}] Finished`));
++					});
++
++					busboy.on('finish', () => {
++						res.writeHead(200, { 'Connection': 'close' });
++						res.end("That's all folks!");
++					});
++
++					return req.pipe(busboy);
++				}
++				next();
++			})
++		}
++	}
++}
++
++function myVirtualPlugin() {
++	const keys = [
++		'virtual:settings.hs',
++		'virtual:starter.hs',
++		'virtual:summary.hs'
++	].reduce((acc, key) => {
++		acc[key] = '\0'+key;
++		acc["\0"+key] = key.replace('virtual:','src/html-ui/').replace('.hs','.html');
++		return acc;
++	},{})
++
++	return {
++	  name: 'virtual',
++	  resolveId(id) {
++		return keys[id] || null;
++	  },
++	  load(id) {
++		if (id in keys) {
++			let src = fs.readFileSync(keys[id]).toString();
++			src = src.replace(/  /g,'');
++
++			const ret = `export default (data)=>{
++				let src = \`${src.replace(/`/g, '\\`')}\`;
++				for (const key in data) {
++					src = src.replace(new RegExp('\{\{'+key+'\}\}','g'),data[key]);
++				}
++				return src;
++			};`;
++			return ret;
++		}
++	  }
++	}
++  }
++
++  const htmlRoot = resolve("src/html-ui/Root.ts");
++
++export const defaultConfig = {
+ 	plugins: [
+-		tsconfigPaths(), 
+-		minifyJsonPlugin(["images", "battle-anims"], true)
++		myVirtualPlugin(),
++		tsconfigPaths() as any,
++		// minifyJsonPlugin(["images", "battle-anims"], true),
++		savePlugin(),
++		// visualizer({open: true})
+ 	],
+ 	clearScreen: false,
+-	appType: "mpa",
+ 	build: {
+-		chunkSizeWarningLimit: 10000,
+-		minify: 'esbuild',
++		minify: 'esbuild' as const,
+ 		sourcemap: false,
+-		rollupOptions: {
+-			onwarn(warning: Rollup.RollupLog, defaultHandler: (warning: string | Rollup.RollupLog) => void) {
+-				// Suppress "Module level directives cause errors when bundled" warnings
+-				if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
+-					return;
+-				}
+-				defaultHandler(warning);
+-			},
++		rollupOptions: {  
++            input: {  
++                index: './index.html',  
++            }  
++        }  
++	},
++	rollupOptions: {
++		onwarn(warning, warn) {
++			// Suppress "Module level directives cause errors when bundled" warnings
++			if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
++				return;
++			}
++			warn(warning);
+ 		},
+ 	},
++	appType: "mpa",
++	resolve: {
++		extensions: [".js", ".ts", ".json", ".html"],
++		alias:{}
++	}
+ };
+ 
+ 
+-export default defineConfig(({mode}) => {
++export default defineConfig(({ mode }) => {
+ 	const envPort = Number(loadEnv(mode, process.cwd()).VITE_PORT);
++	if(loadEnv(mode, process.cwd()).VITE_MODE == "text"){
++		defaultConfig.resolve.alias = {
++			"phaser":resolve("./src/phaserInterface/index.ts"),
++			"rphaser":resolve("node_modules/phaser/dist/phaser.js"),
++			"phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText":htmlRoot,
++			"phaser3-rex-plugins/plugins/inputtext":htmlRoot,
++			'./plugins/i18n': resolve('./src/html-ui/i18n-part.ts'),
++			'#app/plugins/i18n': resolve('./src/html-ui/i18n-part.ts')
++		}
++		defaultConfig.build.rollupOptions.input = {
++			index: './index.html',
++			sprite: './src/html-ui/sprite.html'  
++		};
++	}
+ 
+ 	return ({
+ 		...defaultConfig,
+-		base: '',
+ 		esbuild: {
+ 			pure: mode === 'production' ? ['console.log'] : [],
+ 			keepNames: true,

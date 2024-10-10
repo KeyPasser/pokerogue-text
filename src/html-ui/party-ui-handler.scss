@@ -1,0 +1,106 @@
+#party-ui {
+    width: 100%;
+    padding: 0;
+    font-size: calc(var(--font-size) - 0.3rem);
+
+    .body {
+        display: flex;
+        flex-wrap: wrap;
+
+        >* {
+            display: flex;
+            width: calc(50% - 4px);
+        }
+
+        .poke {
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 16px);
+
+            .name {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                height: 20px;
+            }
+            .type-container{
+                display: flex;
+            }
+            .sprite{
+                width:18px;
+                border-radius: 50%;
+                border:solid 1px #ccc;
+                text-align: center;
+                margin-right: 4px;
+                +div{
+                    width:100%;
+                }
+            }
+
+            .hp-bar {
+                height: 4px;
+                flex: 1;
+                border: solid 1px #eee;
+                position: relative;
+                width: 100%;
+
+                .cur {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    height: 100%;
+                    background-color: rgb(230, 230, 230);
+                }
+            }
+            .party-line1{
+                flex-wrap: wrap;
+            }
+            .party-line1,
+            .party-line2 {
+                display: flex;
+                width: 100%;
+            }
+
+            .party-line2 {
+                margin-top:4px;
+                .flags {
+                    display: flex;
+                }
+            }
+
+            .party-line2 .flags .gender {
+                margin-left: 4px;
+            }
+
+            .party-line2 .flags>* {
+                margin-right: 4px;
+                line-height: 18px;
+            }
+
+            .party-line2 .flags .condition {
+                display: none;
+            }
+        }
+
+        .interactive {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .options {
+            display: flex;
+            flex: 1;
+            font-size: calc( var(--font-size) * 1.5);
+            width: 100%;
+            overflow-x: auto;
+
+            >* {
+                margin: 0 6px;
+            }
+            input{
+                font-size:var(--font-size);
+            }
+        }
+    }
+}

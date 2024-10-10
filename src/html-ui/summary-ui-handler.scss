@@ -1,0 +1,140 @@
+#summary-ui {
+    color: #aaa;
+    display: flex;
+
+    & #base {
+        display: flex;
+        button {
+            flex: 1;
+        }
+
+        >* {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .poke-select {
+            display: flex;
+            flex-direction: column;
+        }
+
+        & .info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .info>* {
+            display: flex;
+            [id] {
+                margin-right: 6px;
+            }
+        }
+
+    }
+
+    #poke-summary-tab {
+        border-bottom: 1px solid #aaa;
+        display: flex;
+
+        >* {
+            margin: 0 8px;
+        }
+
+        .active {
+            background-color: white;
+            position: relative;
+            top: 1px;
+            border: 1px solid #aaa;
+            border-bottom: none;
+        }
+    }
+
+    #tab-body {
+        border: 1px solid #aaa;
+        border-top: none;
+
+        >* {
+            display: none;
+        }
+
+        >*.active {
+            display: block;
+        }
+    }
+
+    #profile {
+        flex-wrap: wrap;
+
+        >* {
+            width: 50%;
+        }
+    }
+
+    #profile,
+    #items,
+    #ivs,
+    #ivs>*,
+    #poke-type {
+        display: flex;
+    }
+
+    #poke-type div:last-child {
+        margin-left: 8px;
+    }
+
+    #luck {
+        display: flex;
+    }
+
+    #ivs>*{
+        width:50%;
+    }
+
+    #ability {
+        margin: 12px 0;
+    }
+
+    #ivs,
+    #items {
+        flex-wrap: wrap;
+    }
+
+    #items {
+        line-height: 12px;
+        font-size: var(--font-size);
+        text-align: center;
+    }
+
+    #items .modifier {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin: 0 4px;
+        border: 1px solid #bbb;
+    }
+
+    #move>* {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+        font-size: calc(var(--font-size) - 0.5rem);
+    }
+
+    #move .type {
+        margin-right: 8px;
+    }
+
+    #move .name+div {
+        margin-left: 30px;
+    }
+
+    #move #description {
+        width: 100%;
+    }
+
+    #move #details {
+        width: 100%;
+    }
+}

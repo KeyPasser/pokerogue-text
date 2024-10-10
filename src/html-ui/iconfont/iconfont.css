@@ -1,0 +1,193 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4689995 */
+  src: url('/fonts/iconfont.woff2') format('woff2'),
+       url('/fonts/iconfont.woff') format('woff'),
+       url('/fonts/iconfont.ttf') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 16px;
+  height: 16px;
+}
+
+.icon-champion:before {
+  content: "\e624";
+}
+
+.icon-pokeball:before {
+  content: "\ea0d";
+}
+
+.icon-pt-17:before {
+  content: "\e6e5";
+}
+
+.icon-pt-5:before {
+  content: "\e601";
+}
+
+.icon-pt-10:before {
+  content: "\e64d";
+}
+
+.icon-pt-4:before {
+  content: "\e604";
+}
+
+.icon-pt-0:before {
+  content: "\e7ea";
+}
+
+.icon-pt-15:before {
+  content: "\e64c";
+}
+
+.icon-pt-2:before {
+  content: "\e69b";
+}
+
+.icon-pt-6:before {
+  content: "\e8e8";
+}
+
+.icon-pt-12:before {
+  content: "\e64e";
+}
+
+.icon-pt-13:before {
+  content: "\e605";
+}
+
+.icon-pt-14:before {
+  content: "\e613";
+}
+
+.icon-pt-16:before {
+  content: "\e61d";
+}
+
+.icon-pt-8:before {
+  content: "\e7a4";
+}
+
+.icon-pt-11:before {
+  content: "\e60f";
+}
+
+.icon-pt-1:before {
+  content: "\e60b";
+}
+
+.icon-pt-7:before {
+  content: "\e7a6";
+}
+
+.icon-wl_paralyze_heal:before {
+  content: "\e745";
+}
+
+.icon-tera:before {
+  content: "\e69f";
+}
+
+.icon-iron:before {
+  content: "\e6a4";
+}
+
+.icon-wl_full_heal:before {
+  content: "\e618";
+}
+
+.icon-sitrus_berry:before {
+  content: "\e603";
+}
+
+.icon-wl_potion:before {
+  content: "\e602";
+}
+
+.icon-wl_antidote:before {
+  content: "\e639";
+}
+
+.icon-wl_custom_spliced:before {
+  content: "\e9e5";
+}
+
+.icon-wl_reset_urge:before {
+  content: "\e623";
+}
+
+.icon-Belt:before {
+  content: "\ebeb";
+}
+
+.icon-wl_guard_spec:before {
+  content: "\e65c";
+}
+
+.icon-wl_burn_heal:before {
+  content: "\e621";
+}
+
+.icon-wl_item_drop:before {
+  content: "\e690";
+}
+
+.icon-citie:before {
+  content: "\e612";
+}
+
+.icon-weijin:before {
+  content: "\e607";
+}
+
+.icon-yimiao:before {
+  content: "\e66d";
+}
+
+.icon-wind:before {
+  content: "\e67c";
+}
+
+.icon-magic:before {
+  content: "\e6c4";
+}
+
+.icon-candy:before {
+  content: "\e6b8";
+}
+
+.icon-jiyin:before {
+  content: "\e71e";
+}
+
+.icon-AttackOutline:before {
+  content: "\e68b";
+}
+
+.icon-healthy:before {
+  content: "\e665";
+}
+
+.icon-Accuracy:before {
+  content: "\e972";
+}
+
+.icon-fan:before {
+  content: "\e668";
+}
+
+.icon-huibi3:before {
+  content: "\e600";
+}
+
+.icon-defense:before {
+  content: "\ea22";
+}
+

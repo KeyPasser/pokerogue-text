@@ -1,0 +1,57 @@
+.top-settings{
+    display: flex;
+    width: 70%;
+    height:50%;
+    overflow: hidden;
+    .body{
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 45px);
+    }
+    .tab {
+        height:20px;
+        display: flex;
+        gap:8px;
+        .active{
+            position: relative;
+            top: 1px;
+            background-color: var(--bg,white);
+            border: 1px solid #ccc;
+            border-bottom: none;
+        }
+    }
+    .tabbody{
+        flex:1;
+        border:var(--border,1px solid #ccc) ;
+        overflow-y: auto;
+        >*{
+            display: none;
+            &.active{
+                display: flex;
+                flex-direction: column;
+            }
+            .setting{
+                display: flex;
+                width: 100%;
+                margin-bottom: 8px;
+                >div{
+                    flex:1;
+                    display: flex;
+                    >*{
+                        text-align: right;
+                        flex:1;
+                    }
+                }
+            }
+            label{
+                margin-right: 8px;
+            }
+            input[type=radio]{
+                display: none;
+                &:checked + span{
+                    color: var(--color,blue);
+                }
+            }
+        }
+    }
+}

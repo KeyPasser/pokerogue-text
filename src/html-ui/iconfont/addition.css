@@ -1,0 +1,65 @@
+.iconfont{
+  line-height: 18px;
+}
+.icon-protein:before{
+    content: "\e6a4";
+}
+.icon-carbos:before{
+    content: "\e6a4";
+}
+.icon-zinc:before{
+    content: "\e6a4";
+}
+.icon-calcium:before{
+    content: "\e6a4";
+}
+.icon-hp_up:before{
+    content: "\e6a4";
+}
+
+.icon-sitrus_berry:before{
+  color:yellowgreen;
+}
+.icon-lum_berry:before{
+  content: "\e603";
+}
+.icon-enigma_berry:before{
+  content: "\e603";
+  color:yellow;
+}
+.icon-liechi_berry:before{
+  content: "\e603";
+}
+.icon-ganlon_berry:before{
+  content: "\e603";
+}
+.icon-petaya_berry:before{
+  content: "\e603";
+}
+.icon-apicot_berry:before{
+  content: "\e603";
+}
+.icon-salac_berry:before{
+  content: "\e603";
+}
+.icon-lansat_berry:before{
+  content: "\e603";
+}
+.icon-starf_berry:before{
+  content: "\e603";
+}
+.icon-leppa_berry:before{
+  content: "\e603";
+}
+
+.icon-jiyin::before{
+  color: #c004fa;
+  font-weight: 600;
+}
+
+.icon-pt-3:before {
+  content: "\e639";
+}
+.icon-pt-9:before {
+  content: "\e621";
+}

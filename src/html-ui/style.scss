@@ -1,0 +1,265 @@
+html{
+  height: 100%;
+}
+body.textOnly {
+  --bg:white;
+  --fg:#ccc;
+  --sb:1px solid rgb(158, 158, 158);
+  background: var(--bg);
+  height: 100%;
+  --font-size:1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+
+  *{
+    box-sizing: content-box;
+  }
+  & #touchControls,
+  & #appContainer {
+    display: none;
+  }
+
+  dialog {
+    border: 2px solid #ccc;
+    background: var(--bg);
+    color: var(--fg);
+    &,
+    h1 #close{
+      margin-left: auto;
+    }
+
+    h1 {
+      display: flex;
+      font-size: 16px;
+    }
+    body{
+      display: flex;
+    }
+  }
+
+  .selected {
+    border: var(--sb);
+  }
+
+  &.dark {
+    --bg:#555;
+    --fg:#ccc;
+    --sb:1px solid rgb(158, 158, 158);
+  }
+
+  .confirm-dialog{
+    width: 100%;
+    height:100%;
+    position: fixed;
+    z-index: 1;
+    background-color: var(--bgmask,rgba(0,0,0,0.4));
+    .content-container{
+      background-color: var(--bg);
+      width:60%;
+      margin:0 auto;
+      margin-top:20%;
+      min-height: 100px;
+      display: flex;
+      padding:20px;
+      .footer{
+        margin-top:auto;
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        div{
+          margin-left: 10px;
+          cursor: pointer;
+          border:1px solid #ccc;
+          border-radius: 4px;
+          padding:0 16px;
+        }
+      }
+    }
+  }
+}
+
+.text-ui {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  color: var(--fg);
+  flex: 1;
+  width: 100%;
+
+  .input-pad {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    right: 0;
+    top: 60%;
+  }
+
+  .input-pad.visible {
+    display: flex;
+  }
+
+  .input-pad>*:last-child {
+    margin-top: 10px;
+  }
+  .skip-button{
+    &.skip{
+      border-color:aqua;
+    }
+  }
+
+  .input-pad>* {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding:0;
+  }
+
+  #basicInfo{
+    height: 20px;
+    align-items: center;
+    gap:10px;
+    padding-bottom: 4px;
+    border-bottom:1px solid #ccc;
+  }
+  #basicInfo,
+  #basicInfo #luckHint {
+    display: flex;
+  }
+  #enemy-global-modifiers{
+    height: 21px;
+    flex: 1;
+  }
+  #player-modifiers{
+    height:24px;
+  }
+  #player-modifiers,
+  #enemy-global-modifiers{
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+    .modifier{
+        span:last-child.max{
+          color: rgb(255, 140, 140);
+        }
+      span:last-child{
+        font-size: 0.8rem;
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .battle {
+    flex: 1;
+    display: flex;
+    height: calc(100% - 60px);
+    flex-direction: column;
+
+
+    #enemies,
+    #player-pokes {
+      display: flex;
+      flex-direction: row;
+      font-size: calc( var(--font-size) * 0.6);
+      
+
+      &>* {
+        padding:4px;
+        flex: 1;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+  }
+
+  #main {
+    display: flex;
+    height: 100%;
+    flex: 1;
+    flex-direction: column;
+
+    #msg-container {
+      padding-bottom: 100px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      height: 100%;
+      width: 100%;
+
+      .poke {
+        padding: 8px;
+
+        &:not(:last-child) {
+          border-right: 1px solid gray;
+        }
+      }
+
+      .fightSelect>*,
+      .commandSelect>*,
+      .modifierContainer>* {
+        padding: 8px;
+        cursor: pointer;
+        font-size: var(--font-size);
+      }
+
+      .partyDom {
+        flex-wrap: wrap;
+      }
+
+      .modifier {
+        display: flex;
+        flex-direction: column;
+        width: calc(100%);
+        max-width: calc(100%);
+
+        &>* {
+          display: flex;
+          width: calc(100% - 16px);
+          max-width: calc(100% - 16px);
+          flex-wrap: wrap;
+          padding: 0 8px;
+          cursor: pointer;
+
+          &>* {
+            margin-right: 8px;
+            margin-bottom: 8px;
+
+          }
+        }
+      }
+
+      .poke-modifier {
+        display: flex;
+        flex-wrap: wrap;
+
+        >* {
+          margin-right: 4px;
+        }
+      }
+
+      .option-select {
+        display: flex;
+        font-size: calc(var(--font-size) * 1.2);
+
+        >* {
+          margin-right: 1rem;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+#op {
+  display: flex;
+  height: 20px;
+}
+
+#op>button {
+  background: transparent;
+  margin-right: 10px;
+  border: none;
+}
+#achv-bar{
+  display: flex;
+  gap:10px;
+}

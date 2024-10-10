@@ -1,0 +1,6 @@
+.enemy-pokes{
+    display: flex;
+    >*.alive{
+        color:green;
+    }
+}

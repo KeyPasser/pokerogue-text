@@ -1,0 +1,38 @@
+#egg-gacha{
+    width: 60%;
+}
+.textOnly{
+    .tickets-container,
+    .gacha-container {
+        display: flex;
+    }
+    
+    .tickets-container {
+        flex-direction: row-reverse;
+        margin-bottom: 20px;
+    
+        >* {
+            margin: 0 8px;
+    
+        }
+    }
+    
+    .gacha-container>* {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #egg-gacha .msgs {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    
+    #eggs-container{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #ccc;
+    }
+}
