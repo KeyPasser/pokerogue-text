@@ -194,7 +194,7 @@ index 07525e9..de3003d 100644
        const moveIds = this.getMoveset().map(m => m!.getMove().id); // TODO: is this bang correct?
        Promise.allSettled(moveIds.map(m => initMoveAnim(this.scene, m)))
 diff --git a/src/main.ts b/src/main.ts
-index b5f813b..6b6e95d 100644
+index b5f813b..b48271b 100644
 --- a/src/main.ts
 +++ b/src/main.ts
 @@ -1,12 +1,15 @@
@@ -337,7 +337,7 @@ index b5f813b..6b6e95d 100644
  Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative;
-@@ -87,23 +142,334 @@ Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative
+@@ -87,23 +142,337 @@ Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative
  Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
  
@@ -646,9 +646,6 @@ index b5f813b..6b6e95d 100644
 +  //@ts-ignore
 +  window.scene = scene; 
  };
-+Promise.all([
-+  fetch("session.data")
-+    .then((response) => response.text()),
  
 -fetch("/manifest.json")
 -  .then(res => res.json())
@@ -657,6 +654,12 @@ index b5f813b..6b6e95d 100644
 -    game["manifest"] = jsonResponse.manifest;
 -  }).catch(() => {
 -    // Manifest not found (likely local build)
++const isGitHub = import.meta.env.VITE_DEPLOY === "github";
++
++Promise.all(isGitHub?[]:[
++  fetch("session.data")
++    .then((response) => response.text()),
++
 +  fetch("save.data")
 +    .then((response) => response.text())
 +
@@ -820,6 +823,19 @@ index b3474be..13076a7 100644
 +    }
      super(scene, 140, -141, false);
    }
+ 
+diff --git a/src/utils.ts b/src/utils.ts
+index b029067..e131827 100644
+--- a/src/utils.ts
++++ b/src/utils.ts
+@@ -268,7 +268,7 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
+ export const sessionIdKey = "pokerogue_sessionId";
+ // Check if the current hostname is 'localhost' or an IP address, and ensure a port is specified
+ export const isLocal = (
+-  (window.location.hostname === "localhost" ||
++  (window.location.hostname === "localhost" || 'keypasser.github.io' === window.location.hostname ||
+    /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname)) &&
+   window.location.port !== "") || window.location.hostname === "";
  
 diff --git a/vite.config.ts b/vite.config.ts
 index 946315c..6b447e5 100644
