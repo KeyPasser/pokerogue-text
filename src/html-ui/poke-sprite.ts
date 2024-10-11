@@ -10,7 +10,7 @@ let gAbsolutePath = "";
 
 const initVariantData = async function loadVD(): Promise<void> {
     Object.keys(variantData).forEach(key => delete variantData[key]);
-    await fetch("/images/pokemon/variant/_masterlist.json").then(res => res.json())
+    await fetch("https://raw.githubusercontent.com/pagefaultgames/pokerogue/refs/heads/main/public/images/pokemon/variant/_masterlist.json").then(res => res.json())
       .then(v => {
         Object.keys(v).forEach(k => variantData[k] = v[k]);
         if (1) {

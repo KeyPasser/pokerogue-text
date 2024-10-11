@@ -18,6 +18,14 @@ class TextPlugin{
         this.scene = scene
         this.container = (document.querySelector('#msg-container') as HTMLDivElement)
     }
+    increaseMsgCount(){
+        this.count++;
+        const limit = 260
+        if(this.count >= limit+1){
+            this.count = limit;
+            document.querySelector("#msg-container .msg")?.remove();
+        }
+    }
     showHTML(html: string, className: string = "") {
         const div = document.createElement("div");
       div.innerHTML = html;
@@ -88,12 +96,7 @@ class TextPlugin{
             dom.textContent = msg+"\n";
             document.querySelector("#msg-container")?.append(dom);
     
-            this.count++;
-            const limit = 260
-            if(this.count >= limit+1){
-                this.count = limit;
-                document.querySelector("#msg-container .msg")?.remove();
-            }
+            this.increaseMsgCount();
         }
 
         container.scrollTop = container.scrollHeight;
@@ -106,6 +109,7 @@ class TextPlugin{
             dom.innerHTML = bbcodeToHtml(msg);
             document.querySelector("#msg-container")?.append(dom);
 
+            this.increaseMsgCount();
         container.scrollTop = container.scrollHeight;
     }
     showShadowText(msg,shadow){
@@ -115,7 +119,7 @@ class TextPlugin{
             dom.title = shadow;
             document.querySelector("#msg-container")?.append(dom);
     
-            this.count++;
+            this.increaseMsgCount();
     }
 }
 export {TextPlugin,bbcodeToHtml};

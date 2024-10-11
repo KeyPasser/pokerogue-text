@@ -1,12 +1,10 @@
 import * as Utils from "../utils";
-import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import {Button} from "#enums/buttons";
 import i18next from "i18next";
 import HUiHandler from "./PhaseUI/HUiHandler";
-import TextBattleScene from "#app/text-battle-scene";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import HTMLContainer from "./Root";
 import { getTextColor, TextStyle } from "#app/ui/text";
-import { getIVsName } from "./widgets/pokeName";
 import { Stat, PERMANENT_STATS, getStatKey } from "#app/enums/stat";
 
 export default class HBattleMessageUiHandler extends HUiHandler {

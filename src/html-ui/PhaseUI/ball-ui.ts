@@ -1,7 +1,6 @@
 
-import { getPokeballName } from "#app/data/pokeball.js";
-import { CommandPhase } from "#app/phases/command-phase.js";
-import TextBattleScene from "#app/text-battle-scene.js";
+import { getPokeballName } from "#app/data/pokeball";
+import { CommandPhase } from "#app/phases/command-phase";
 import {Button} from "#enums/buttons";
 import i18next from "i18next";
 import { Command } from "./command-ui";

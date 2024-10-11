@@ -19,16 +19,21 @@ const extendLapsePhase = <T extends new (...args: any[]) => any>(Clz:T)=>{
             const eggsToHatchCount: number = eggsToHatch.length;
     
             if (eggsToHatchCount > 0) {
+                this.scene.textPlugin.showOptionDom(document.createElement("br"));
                 this.regularlyHatch(eggsToHatch);
-            } 
+            }else{
                 this.end();
-        }
-        regularlyHatch(eggsToHatch: Egg[]) {
-            let eggsToHatchCount: number = eggsToHatch.length;
-            for (const egg of eggsToHatch) {
-              this.scene.unshiftPhase(new HEggHatchPhase(this.scene, this as any, egg, eggsToHatchCount));
-              eggsToHatchCount--;
             }
+        }
+        async regularlyHatch(eggsToHatch: Egg[]) {
+            let eggsToHatchCount: number = eggsToHatch.length;
+
+            for (const egg of eggsToHatch) {
+                const phase = new HEggHatchPhase(this.scene, this as any, egg, eggsToHatchCount);
+                eggsToHatchCount--;
+                await phase.start();
+            }
+            this.end();
         }
 
     }

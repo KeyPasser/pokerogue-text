@@ -4,7 +4,7 @@ import { argbFromRgba } from "@material/material-color-utilities";
 import {Button} from "#enums/buttons";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import { HTMLContainer } from "./Root";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene.js";
 import { Mode } from "./UI";
 
 export interface OptionSelectConfig {

@@ -1,4 +1,4 @@
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import SettingTemplate from "virtual:settings.hs";
 import { Mode } from "./UI";

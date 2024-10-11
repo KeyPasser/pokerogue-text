@@ -1,7 +1,6 @@
 import { getTierColor, HTMLContainer, HTMLObject } from "./Root";
 import { Type, getTypeRgb } from "../data/type";
 import { StatusEffect } from "#app/enums/status-effect.js";
-import TextBattleScene from "#app/text-battle-scene.js";
 import * as Utils from "../utils";
 import Pokemon, { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import { getGenderSymbol } from "#app/data/gender.js";
@@ -13,6 +12,8 @@ import { TextStyle } from "#app/ui/text.js";
 import { ShinyColor } from "./Constants";
 import { checkPokemonMissing, getPokeTypeColor } from "./util";
 import { Stat } from "#app/enums/stat";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
+import { allAbilities } from "#app/data/ability.js";
 
 const HStatusEffect = {
   [StatusEffect.NONE]: "",
@@ -93,6 +94,7 @@ export class HPokeBattleInfo extends HTMLContainer {
                         <span class="level-number"></span>
                     </div>
                     <div class="poke-generation"></div>
+                    <div class="poke-ablities"></div>
                 </div>
                 <div class="line2">
                   <div class="type-container">
@@ -130,13 +132,21 @@ export class HPokeBattleInfo extends HTMLContainer {
         </div>`;
 
     this.setVisible(false);
-    container.append(this.dom);
+    //container.append(this.dom);
 
     this.container = container;
 
     this.statOrder = this.player ? this.statOrderPlayer : this.statOrderEnemy; // this tells us whether or not to use the player or enemy battle stat order
   }
-
+  setVisible(visible){
+    if(visible){
+      this.container.append(this.dom)
+    }else{
+      this.dom.remove()
+    }
+    super.setVisible(visible)
+    return this
+  }
   getStatsValueContainer(): any {
     return {
       list: []
@@ -175,12 +185,12 @@ export class HPokeBattleInfo extends HTMLContainer {
 
     if (pokemon.scene.gameMode.isClassic) {
       if (pokemon.scene.gameData.starterData[pokemon.species.getRootSpeciesId()].classicWinCount > 0 && pokemon.scene.gameData.starterData[pokemon.species.getRootSpeciesId(true)].classicWinCount > 0) {
-        dom.setAlpha(1)
+        dom.setVisible(true)
       } else{
-        dom.setAlpha(0)
+        dom.setVisible(false)
       }
     }else{
-      dom.setAlpha(0)
+      dom.setVisible(false)
     }
 
     if (!this.player) {
@@ -472,6 +482,22 @@ export class HPokeBattleInfo extends HTMLContainer {
         this.lastStats = statsStr;
       }
 
+      const abdom = this.findObject(".poke-ablities").removeAll();
+      if(this.player && !this.scene.currentBattle.double){
+        const allAbilityInfo = [pokemon?.getAbility(true)!]; // Creates an array to iterate through
+
+        const abs = pokemon.battleData?.abilitiesApplied!;
+        if(abs&&abs.length){
+          allAbilityInfo.length = 0;
+          abs.forEach((ability) => {
+            allAbilityInfo.push(allAbilities [ability]);
+          })
+        }
+
+        allAbilityInfo.forEach((ability, i) => {
+          abdom.add(new HTMLContainer().setText(ability.name).setTitle(ability.description));
+        })
+      }
       resolve();
     });
   }

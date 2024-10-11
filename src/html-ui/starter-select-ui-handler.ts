@@ -28,7 +28,7 @@ import { Species } from "#enums/species";
 import { Button } from "#enums/buttons";
 import { EggSourceType } from "#app/enums/egg-source-types";
 import HUiHandler from "./PhaseUI/HUiHandler";
-import TextBattleScene from "#app/text-battle-scene";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { StarterSelectCallback } from "#app/ui/starter-select-ui-handler";
 import StarterTemplate from "virtual:starter.hs";
 import { HTMLContainer, HTMLObject } from "./Root";

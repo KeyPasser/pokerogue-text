@@ -24,7 +24,7 @@ import SettingsDisplayUiHandler from "../ui/settings/settings-display-ui-handler
 import SettingsAudioUiHandler from "../ui/settings/settings-audio-ui-handler";
 import { PlayerGender } from "#enums/player-gender";
 import HTargetSelectUi from "./PhaseUI/target-select";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import HTitleUiHandler from "./PhaseUI/title-ui";
 import HCommandUiHandler from "./PhaseUI/command-ui";
 import HFightUiHandler from "./PhaseUI/fight-ui";

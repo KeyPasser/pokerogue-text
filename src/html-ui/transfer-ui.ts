@@ -1,6 +1,6 @@
 import { pokemon } from './../locales/pt_BR/pokemon';
 import { PokemonHeldItemModifier } from "#app/modifier/modifier.js";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import { HTMLDialog } from "./Root";
 import "./transfer-ui.scss"

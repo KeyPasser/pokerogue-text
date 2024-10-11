@@ -1,13 +1,14 @@
 import "./style.scss"
 import { bbcodeToHtml } from "./TextPlugin";
-import type TextBattleScene from '#app/text-battle-scene.js';
+import type TextBattleScene from '#app/html-ui/text-battle-scene';
 
 import { addHTMLSprit } from "./PhaseInterface";
-import { ModifierTier } from "#app/modifier/modifier-tier.js";
+import { ModifierTier } from "#app/modifier/modifier-tier";
 import { checkPokemonMissing } from "./util";
-import { BattleSceneEventType } from "#app/events/battle-scene.js";
-import type { EnemyPokemon } from "#app/field/pokemon.js";
+import { BattleSceneEventType } from "#app/events/battle-scene";
+import type { EnemyPokemon } from "#app/field/pokemon";
 import { setPokemonNameComponent } from "./widgets/pokeName";
+import {isMobile} from "#app/touch-controls";
 
 enum TextStyle {
     MESSAGE,
@@ -584,9 +585,7 @@ class TextUI extends HTMLContainer {
         if (window.location.href.indexOf("localhost") !== -1) {
             this.theme = Theme.GRAY;
         }
-        import("#app/touch-controls.js")
-            .then(module => {
-                if (module.isMobile()) {
+                if (isMobile()) {
                     if (window.location.href.indexOf("localhost") == -1) {
                         document.body.classList.add('dark');
                         this.theme = Theme.DARK;
@@ -607,7 +606,6 @@ class TextUI extends HTMLContainer {
                         button.classList.toggle("skip")
                     });
                 }
-            })
 
         scene.eventTarget.addEventListener("onTurnInit", () => {
             if (this.scene.currentBattle.trainer) {

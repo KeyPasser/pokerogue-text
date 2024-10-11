@@ -11,7 +11,7 @@ import { getTextColor, TextStyle } from "#app/ui/text.js";
 import ConfirmUiHandler from "#app/ui/confirm-ui-handler.js";
 import { bbcodeToHtml } from "./TextPlugin";
 import './pokemon-info-container.css'
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { ShinyColor } from "./Constants";
 import { setPokemonNameComponent } from "./widgets/pokeName";
 

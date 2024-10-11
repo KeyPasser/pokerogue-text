@@ -10,7 +10,7 @@ import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import { Mode } from "./UI";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import "./gacha-style.scss"
 import { getTierColor, HTMLContainer, HTMLDialog } from "./Root";
 import { ModifierTier } from "#app/modifier/modifier-tier.js";

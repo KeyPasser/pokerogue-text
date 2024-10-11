@@ -4,7 +4,7 @@ import { speciesStarters } from "../data/pokemon-species";
 import {Button} from "#enums/buttons";
 import i18next from "i18next";
 import HUiHandler from "./PhaseUI/HUiHandler";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { Mode } from "./UI";
 import { HTMLDialog } from "./Root";
 import "./game-stats-ui-handler.scss"

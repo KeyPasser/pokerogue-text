@@ -9,7 +9,7 @@ import * as Utils from "./../utils";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
 import HUiHandler from "./PhaseUI/HUiHandler";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { getModifierTierTextTint, getTextColor, getTextStyleOptions, TextStyle } from "#app/ui/text.js";
 import { HTMLContainer, HTMLDialog } from "./Root";
 import './modifier-select-ui-handler.scss'

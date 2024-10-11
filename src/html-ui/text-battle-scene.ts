@@ -27,6 +27,7 @@ import { addHTMLSprit } from "./PhaseInterface";
 import { MoneyFormat } from "../enums/money-format";
 import { LoginPhase } from "../phases/login-phase";
 import { TitlePhase } from "../phases/title-phase";
+import HDamageNumberHandler from "./damage-number-handler";
 
 export const getProxy = (obj) => {
   if (obj) return obj;
@@ -286,6 +287,10 @@ export default class TextBattleScene extends BattleScene {
 
     //@ts-ignore
     this.i18n = i18next;
+
+    this.damageNumbersMode = 0;
+
+    this.damageNumberHandler = new HDamageNumberHandler(this);
   }
   async initExpSprites(): Promise<void>{
     return Promise.resolve();

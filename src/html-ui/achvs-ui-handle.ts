@@ -5,7 +5,7 @@ import { ParseKeys } from "i18next";
 import { PlayerGender } from "#enums/player-gender";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import { Mode } from "./UI";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene.js";
 
 export default class HAchvsUiHandler extends HUiHandler {
   constructor(scene: TextBattleScene, mode: Mode | null = null) {

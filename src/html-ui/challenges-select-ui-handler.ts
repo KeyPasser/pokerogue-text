@@ -4,7 +4,7 @@ import { Challenge } from "#app/data/challenge.js";
 import * as Utils from "../utils";
 import { Challenges } from "#app/enums/challenges.js";
 import HUiHandler from "./PhaseUI/HUiHandler";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { Mode } from "./UI";
 import HTMLContainer, { HTMLDialog } from "./Root";
 import "./challenges-select-ui-handler.scss"

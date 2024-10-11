@@ -5,7 +5,7 @@ import { Mode } from "../../ui/ui";
 import UiHandler from "#app/ui/ui-handler.js";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import TransferUI from "../transfer-ui";
 import HUiHandler from "./HUiHandler";
 import { getPokemonNameWithAffix } from "#app/messages.js";

@@ -1,11 +1,11 @@
 import { Button } from "#app/enums/buttons.js";
 import { getVoucherTypeIcon, getVoucherTypeName, Voucher, vouchers } from "#app/system/voucher.js";
-import TextBattleScene from "#app/text-battle-scene.js";
 import i18next from "i18next";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import { HTMLDialog } from "./Root";
 import { Mode } from "./UI";
 import "./vouchers-ui-handler.scss"
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 
 export default class HVouchersUiHandler extends HUiHandler {
   ui:HTMLDialog;

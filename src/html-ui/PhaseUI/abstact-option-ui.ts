@@ -1,7 +1,7 @@
 
 import * as Utils from "../../utils";
 import {Button} from "#enums/buttons";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "../text-battle-scene";
 import { Mode } from "../UI";
 import HUiHandler from "./HUiHandler";
 

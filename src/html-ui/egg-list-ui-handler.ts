@@ -3,7 +3,7 @@ import { Egg } from "../data/egg";
 import {Button} from "#enums/buttons";
 import i18next from "i18next";
 import HUiHandler from "./PhaseUI/HUiHandler";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { getTierColor, HTMLDialog } from "./Root";
 import { ModifierTier } from "#app/modifier/modifier-tier.js";
 import "./eggs-list.scss"

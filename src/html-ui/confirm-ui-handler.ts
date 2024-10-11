@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import {Button} from "#enums/buttons";
 import HUiHandler from "./PhaseUI/HUiHandler";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { getRootContainer, HTMLContainer } from "./Root";
 
 

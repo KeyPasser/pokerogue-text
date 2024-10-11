@@ -18,7 +18,7 @@ import { getPokemonNameWithAffix } from "#app/messages.js";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import PartyUiHandler, { PartyModifierSpliceSelectCallback, PartyModifierTransferSelectCallback, PartyOption, PartySelectCallback, PartyUiMode, PokemonModifierTransferSelectFilter, PokemonMoveSelectFilter, PokemonSelectFilter } from "#app/ui/party-ui-handler.js";
 import MoveInfoOverlay from "#app/ui/move-info-overlay.js";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { getTextColor, TextStyle } from "#app/ui/text.js";
 import { Command } from "./PhaseUI/command-ui";
 import { Mode } from "./UI";

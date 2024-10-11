@@ -1,5 +1,5 @@
 import { Button } from "#app/enums/buttons.js";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 
 export default class HUiHandler{
     protected scene: TextBattleScene;

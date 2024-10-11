@@ -2,7 +2,7 @@ import { Mode } from "../../ui/ui";
 import { getMoveTargets } from "../../data/move";
 import {Button} from "#enums/buttons";
 import { Moves } from "#enums/moves";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { BattlerIndex } from "#app/battle.js";
 import i18next from "i18next";
 import "./target-select-style.scss"

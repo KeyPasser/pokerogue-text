@@ -1,7 +1,7 @@
 import { Gender } from "#app/data/gender.js";
 import { Stat } from "#app/enums/stat.js";
 import type Pokemon from "#app/field/pokemon.js";
-import type TextBattleScene from "#app/text-battle-scene.js";
+import type TextBattleScene from "#app/html-ui/text-battle-scene";
 import { isMobile } from "#app/touch-controls.js";
 import { ShinyColor } from "../Constants";
 import { HTMLContainer } from "../Root";
@@ -31,7 +31,10 @@ export const showSprite = async (pokemon:Pokemon,event)=>{
 
     document.body.append(dom);
 
-    dom.src ="/src/html-ui/sprite.html";
+    if(import.meta.env.VITE_DEPLOY === "github"){
+      dom.src ="/pokerogue-text/dist/src/html-ui/sprite.html";
+    }else
+      dom.src ="/src/html-ui/sprite.html";
     phaserLoader = new Promise((resolve)=>{
       dom.onload = ()=>{
         resolve(1);

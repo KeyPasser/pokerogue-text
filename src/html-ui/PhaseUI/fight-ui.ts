@@ -5,7 +5,7 @@ import i18next from "i18next";
 import {Button} from "#enums/buttons";
 import Pokemon, { PokemonMove } from "#app/field/pokemon.js";
 import UiHandler from "#app/ui/ui-handler.js";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { Mode } from "../UI";
 import { CommandPhase } from "#app/phases/command-phase.js";
 import { getTypeDamageMultiplierColor, Type } from "#app/data/type.js";

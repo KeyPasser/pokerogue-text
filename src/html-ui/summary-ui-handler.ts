@@ -16,13 +16,13 @@ import { Nature, getNatureName, getNatureStatMultiplier } from "../data/nature";
 import { loggedInUser } from "../account";
 import { Variant, getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";
-import { Ability } from "../data/ability.js";
+import { Ability, allAbilities } from "../data/ability.js";
 import i18next from "i18next";
 import { modifierSortFunc } from "../modifier/modifier";
 import { PlayerGender } from "#enums/player-gender";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler.js";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { HTMLContainer, HTMLDialog } from "./Root";
 import { getBBCodeFrag, getTextColor, TextStyle } from "#app/ui/text.js";
 import { Mode } from "./UI";
@@ -542,10 +542,19 @@ export default class HSummaryUiHandler extends HUiHandler {
           luckText.setColor(TextStyle.SUMMARY);
         }
 
+        
         const allAbilityInfo = [this.pokemon?.getAbility(true)!]; // Creates an array to iterate through
+
+        const abs = this.pokemon?.battleData?.abilitiesApplied!;
+        if(abs&&abs.length){
+          allAbilityInfo.length = 0;
+          abs.forEach((ability) => {
+            allAbilityInfo.push(allAbilities[ability]);
+          })
+        }
+
         // Only add to the array and set up displaying a passive if it's unlocked
         if (this.pokemon?.hasPassive()) {
-
           allAbilityInfo.push(this.pokemon.getPassiveAbility());
         }
         const abilityDom = ui.findObject("#ability");

@@ -9,7 +9,7 @@ import i18next from "i18next";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import HUiHandler from "./PhaseUI/HUiHandler";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import HTMLContainer from "./Root";
 import { getBBCodeFrag, TextStyle } from "#app/ui/text.js";
 import "./mystery-encounter-ui-handler.scss"

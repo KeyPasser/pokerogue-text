@@ -1,18 +1,19 @@
 diff --git a/.env.development b/.env.development
-index 6c92036..e5f462f 100644
+index 6c92036..8486b1f 100644
 --- a/.env.development
 +++ b/.env.development
-@@ -5,3 +5,4 @@ VITE_DISCORD_CLIENT_ID=1234567890
+@@ -5,3 +5,5 @@ VITE_DISCORD_CLIENT_ID=1234567890
  VITE_GOOGLE_CLIENT_ID=1234567890
  VITE_I18N_DEBUG=1
  VITE_PORT=8000
 +VITE_MODE=text
++DEPLOY=local
 \ No newline at end of file
 diff --git a/.env.production b/.env.production
-index 65dc787..5e194db 100644
+index 65dc787..af76eba 100644
 --- a/.env.production
 +++ b/.env.production
-@@ -1,6 +1,7 @@
+@@ -1,6 +1,8 @@
 -VITE_BYPASS_LOGIN=0
 +VITE_BYPASS_LOGIN=1
  VITE_BYPASS_TUTORIAL=0
@@ -23,9 +24,10 @@ index 65dc787..5e194db 100644
 \ No newline at end of file
 +VITE_I18N_DEBUG=0
 +VITE_MODE=text
++VITE_DEPLOY=github
 \ No newline at end of file
 diff --git a/index.html b/index.html
-index 390a29f..d1473b5 100644
+index 390a29f..042b923 100644
 --- a/index.html
 +++ b/index.html
 @@ -61,7 +61,8 @@
@@ -38,7 +40,7 @@ index 390a29f..d1473b5 100644
  	<div id="touchControls">
  		<div class="left">
  			<div id="control-group-dpad" class="control-group control-group-dpad">
-@@ -143,6 +144,51 @@
+@@ -143,8 +144,32 @@
  
  		</div>
  	</div>
@@ -64,46 +66,32 @@ index 390a29f..d1473b5 100644
 +
 +
 +			}
-+			var uploadTask;
-+			var startSaveInterval = window.startSaveInterval = ()=>{
-+				if(uploadTask)return;
-+				uploadTask = setInterval(()=>{
-+					//exportData();
-+				}, 1000 * 30);
-+			}
-+			document.addEventListener("keydown",startSaveInterval);
-+			document.addEventListener("pointerdown",startSaveInterval);
-+
-+			var setFilter = () => {
-+				const filter = document.querySelector("#app").style.filter;
-+				if(filter == "none"){
-+					document.querySelector("#app").style.filter = "grayscale(1) contrast(30%) invert(1)";
-+				}else{
-+					document.querySelector("#app").style.filter = "none";
-+				}
-+			}
 +		</script>
 +		<button id="reset">重置</button>
 +		<button id="save" onclick="exportData()">上载</button>
-+		<button id="color" onclick="setFilter()">彩色</button>
 +	</div>
  	<script type="module" src="./src/main.ts"></script>
- 	<script src="./src/touch-controls.ts" type="module"></script>
- 	<script src="./src/debug.js" type="module"></script>
+-	<script src="./src/touch-controls.ts" type="module"></script>
+-	<script src="./src/debug.js" type="module"></script>
+ </body>
+ </html>
+\ No newline at end of file
 diff --git a/package.json b/package.json
-index 3741801..babd9eb 100644
+index 3741801..0257d56 100644
 --- a/package.json
 +++ b/package.json
-@@ -5,7 +5,7 @@
+@@ -5,8 +5,9 @@
  	"type": "module",
  	"scripts": {
  		"start": "vite",
 -		"start:dev": "vite --mode development",
 +		"start:dev": "vite --host --mode development",
  		"build": "vite build",
++		"opt": "vite optimize",
  		"build:beta": "vite build --mode beta",
  		"preview": "vite preview",
-@@ -14,55 +14,47 @@
+ 		"test": "vitest run --project pre && vitest run --project main",
+@@ -14,55 +15,47 @@
  		"test:watch": "vitest run --project pre && vitest watch --project main --coverage",
  		"test:silent": "vitest run --project pre && vitest run --project main --silent",
  		"typecheck": "tsc --noEmit",
@@ -206,7 +194,7 @@ index 07525e9..de3003d 100644
        const moveIds = this.getMoveset().map(m => m!.getMove().id); // TODO: is this bang correct?
        Promise.allSettled(moveIds.map(m => initMoveAnim(this.scene, m)))
 diff --git a/src/main.ts b/src/main.ts
-index b5f813b..0a614fc 100644
+index b5f813b..6b6e95d 100644
 --- a/src/main.ts
 +++ b/src/main.ts
 @@ -1,12 +1,15 @@
@@ -349,7 +337,7 @@ index b5f813b..0a614fc 100644
  Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative;
-@@ -87,23 +142,332 @@ Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative
+@@ -87,23 +142,334 @@ Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative
  Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
  
@@ -359,6 +347,8 @@ index b5f813b..0a614fc 100644
  let game;
  
 -const startGame = () => {
+-  game = new Phaser.Game(config);
+-  game.sound.pauseOnBlur = false;
 +const noPhase = () => {
 +  Math.RND = new Phaser.Math.RandomDataGenerator();
 +
@@ -578,51 +568,6 @@ index b5f813b..0a614fc 100644
 +  return textBS
 +}
 +
-+const startPhase = async () => {
-+
-+  const UIPlugin = await import("phaser3-rex-plugins/templates/ui/ui-plugin");
-+  const BBCodeTextPlugin = await import("phaser3-rex-plugins/plugins/bbcodetext-plugin");
-+  const InputTextPlugin = await import("phaser3-rex-plugins/plugins/inputtext-plugin.js");
-+  const TransitionImagePackPlugin = await import("phaser3-rex-plugins/templates/transitionimagepack/transitionimagepack-plugin.js");
-+
-+  //@ts-ignore
-+  config.plugins.global = [{
-+    key: "rexInputTextPlugin",
-+    plugin: InputTextPlugin.default,
-+    start: true
-+  }, {
-+    key: "rexBBCodeTextPlugin",
-+    plugin: BBCodeTextPlugin.default,
-+    start: true
-+  }, {
-+    key: "rexTransitionImagePackPlugin",
-+    plugin: TransitionImagePackPlugin.default,
-+    start: true
-+  }]
-+  //@ts-ignore
-+  config.plugins.scene = [{
-+    key: "rexUI",
-+    plugin: UIPlugin.default,
-+    mapping: "rexUI"
-+  }]
-+
-   game = new Phaser.Game(config);
-   game.sound.pauseOnBlur = false;
-+  const originSound = game.sound;
-+
-+  game.sound = new Proxy(originSound, {
-+    get: function (target, prop) {
-+      if (prop == 'get') {
-+        return (...args) => {
-+          const s = target[prop].apply(target, args);
-+          return getProxy(s);
-+        };
-+      } else {
-+        return target[prop];
-+      }
-+    }
-+  });
-+}
 +
 +
 +const startGame = async () => {
@@ -643,6 +588,53 @@ index b5f813b..0a614fc 100644
 +    scene = noPhase()
 +  } else {
 +    config.scene = [LoadingScene, BattleScene]
++
++    const startPhase = async () => {
++
++      const UIPlugin = await import("phaser3-rex-plugins/templates/ui/ui-plugin");
++      const BBCodeTextPlugin = await import("phaser3-rex-plugins/plugins/bbcodetext-plugin");
++      const InputTextPlugin = await import("phaser3-rex-plugins/plugins/inputtext-plugin.js");
++      const TransitionImagePackPlugin = await import("phaser3-rex-plugins/templates/transitionimagepack/transitionimagepack-plugin.js");
++    
++      //@ts-ignore
++      config.plugins.global = [{
++        key: "rexInputTextPlugin",
++        plugin: InputTextPlugin.default,
++        start: true
++      }, {
++        key: "rexBBCodeTextPlugin",
++        plugin: BBCodeTextPlugin.default,
++        start: true
++      }, {
++        key: "rexTransitionImagePackPlugin",
++        plugin: TransitionImagePackPlugin.default,
++        start: true
++      }]
++      //@ts-ignore
++      config.plugins.scene = [{
++        key: "rexUI",
++        plugin: UIPlugin.default,
++        mapping: "rexUI"
++      }]
++    
++      game = new Phaser.Game(config);
++      game.sound.pauseOnBlur = false;
++      const originSound = game.sound;
++    
++      game.sound = new Proxy(originSound, {
++        get: function (target, prop) {
++          if (prop == 'get') {
++            return (...args) => {
++              const s = target[prop].apply(target, args);
++              return getProxy(s);
++            };
++          } else {
++            return target[prop];
++          }
++        }
++      });
++    }
++    
 +    await startPhase()
 +    scene = game.scene.scenes[0]
 +  }
@@ -655,8 +647,8 @@ index b5f813b..0a614fc 100644
 +  window.scene = scene; 
  };
 +Promise.all([
-+  // fetch("session.data")
-+  //   .then((response) => response.text()),
++  fetch("session.data")
++    .then((response) => response.text()),
  
 -fetch("/manifest.json")
 -  .then(res => res.json())
@@ -665,8 +657,8 @@ index b5f813b..0a614fc 100644
 -    game["manifest"] = jsonResponse.manifest;
 -  }).catch(() => {
 -    // Manifest not found (likely local build)
-+  // fetch("save.data")
-+  //   .then((response) => response.text())
++  fetch("save.data")
++    .then((response) => response.text())
 +
 +]).then(([session = "", save = ""]) => {
 +
@@ -830,10 +822,10 @@ index b3474be..13076a7 100644
    }
  
 diff --git a/vite.config.ts b/vite.config.ts
-index 946315c..b248f25 100644
+index 946315c..6b447e5 100644
 --- a/vite.config.ts
 +++ b/vite.config.ts
-@@ -1,37 +1,145 @@
+@@ -1,43 +1,152 @@
 -import { defineConfig, loadEnv, Rollup, UserConfig } from 'vite';
 +import { defineConfig, loadEnv } from 'vite';
  import tsconfigPaths from 'vite-tsconfig-paths';
@@ -968,14 +960,18 @@ index 946315c..b248f25 100644
 +	resolve: {
 +		extensions: [".js", ".ts", ".json", ".html"],
 +		alias:{}
-+	}
++	},
  };
- 
- 
+-
+-
 -export default defineConfig(({mode}) => {
+-	const envPort = Number(loadEnv(mode, process.cwd()).VITE_PORT);
+-
 +export default defineConfig(({ mode }) => {
- 	const envPort = Number(loadEnv(mode, process.cwd()).VITE_PORT);
-+	if(loadEnv(mode, process.cwd()).VITE_MODE == "text"){
++	const envs = loadEnv(mode, process.cwd());
++	console.log(envs.VITE_DEPLOY)
++	const envPort = Number(envs.VITE_PORT);
++	if(envs.VITE_MODE == "text"){
 +		defaultConfig.resolve.alias = {
 +			"phaser":resolve("./src/phaserInterface/index.ts"),
 +			"rphaser":resolve("node_modules/phaser/dist/phaser.js"),
@@ -984,15 +980,23 @@ index 946315c..b248f25 100644
 +			'./plugins/i18n': resolve('./src/html-ui/i18n-part.ts'),
 +			'#app/plugins/i18n': resolve('./src/html-ui/i18n-part.ts')
 +		}
-+		defaultConfig.build.rollupOptions.input = {
-+			index: './index.html',
-+			sprite: './src/html-ui/sprite.html'  
-+		};
 +	}
- 
++let base = (() => {  
++	if(envs.VITE_DEPLOY == 'github')
++		return '/pokerogue-text/dist/'
++	return '/'  
++  })();
  	return ({
  		...defaultConfig,
 -		base: '',
  		esbuild: {
  			pure: mode === 'production' ? ['console.log'] : [],
  			keepNames: true,
+ 		},
+ 		server: {
+ 			port: !isNaN(envPort) ? envPort : 8000,
+-		}
++		},
++		base
+ 	});
+ });

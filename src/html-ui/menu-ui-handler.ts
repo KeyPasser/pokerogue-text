@@ -7,7 +7,7 @@ import { GameDataType } from "#enums/game-data-type";
 import BgmBar from "#app/ui/bgm-bar";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler.js";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { HBgmBar, Mode } from "./UI";
 import { bypassLogin } from "#app/battle-scene.js";
 import * as Utils from "../utils";

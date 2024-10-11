@@ -57,9 +57,8 @@
       e.preventDefault();
     });
   </script>
-  <script type="module" crossorigin src="/pokerogue-text/dist/assets/index-Cho65Ub4.js"></script>
-  <link rel="modulepreload" crossorigin href="/pokerogue-text/dist/assets/_commonjsHelpers-B8OYptiW.js">
-  <link rel="stylesheet" crossorigin href="/pokerogue-text/dist/assets/index-c-BgGsZj.css">
+  <script type="module" crossorigin src="/pokerogue-text/dist/assets/index-yQ6DRQpH.js"></script>
+  <link rel="stylesheet" crossorigin href="/pokerogue-text/dist/assets/index-CsPrS3eP.css">
 </head>
 
 <body>
@@ -168,28 +167,9 @@
 
 
 			}
-			var uploadTask;
-			var startSaveInterval = window.startSaveInterval = ()=>{
-				if(uploadTask)return;
-				uploadTask = setInterval(()=>{
-					//exportData();
-				}, 1000 * 30);
-			}
-			document.addEventListener("keydown",startSaveInterval);
-			document.addEventListener("pointerdown",startSaveInterval);
-
-			var setFilter = () => {
-				const filter = document.querySelector("#app").style.filter;
-				if(filter == "none"){
-					document.querySelector("#app").style.filter = "grayscale(1) contrast(30%) invert(1)";
-				}else{
-					document.querySelector("#app").style.filter = "none";
-				}
-			}
 		</script>
 		<button id="reset">重置</button>
 		<button id="save" onclick="exportData()">上载</button>
-		<button id="color" onclick="setFilter()">彩色</button>
-	</div>
+	</div>
 </body>
 </html>

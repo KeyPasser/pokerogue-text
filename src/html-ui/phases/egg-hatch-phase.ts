@@ -3,7 +3,6 @@ import { Egg, EGG_SEED } from "#app/data/egg.js";
 import { PlayerPokemon } from "#app/field/pokemon.js";
 import { Phase } from "#app/phase.js";
 import EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler.js";
-// import PokemonInfoContainer from "#app/ui/pokemon-info-container.js";
 import i18next from "i18next";
 import { Mode } from "../UI";
 import * as Utils from "../../utils";
@@ -48,7 +47,6 @@ export class HEggHatchPhase extends Phase {
   start() {
     super.start();
 
-    this.scene.ui.setModeForceTransition(Mode.EGG_HATCH_SCENE).then(() => {
 
       if (!this.egg) {
         return this.end();
@@ -78,9 +76,8 @@ export class HEggHatchPhase extends Phase {
       (this.scene as any).textPlugin.showMsg(i18next.t(`gameStatsUiHandler:eggsHatched`) + ":" +this.eggsToHatchCount );
 
       if (!this.hatched) {
-        this.doHatch();
+        return this.doHatch();
       }
-    });
   }
 
   end() {
@@ -90,7 +87,6 @@ export class HEggHatchPhase extends Phase {
       this.scene.time.delayedCall(250, () => this.scene.setModifiersVisible(true));
     }
     this.pokemon.getBattleInfo().destroy();
-    super.end();
   }
 
   /**
@@ -127,14 +123,14 @@ export class HEggHatchPhase extends Phase {
   /**
    * Plays the animation of an egg hatch
    */
-  doHatch(): void {
-    this.doReveal();
+  doHatch(): Promise<number> {
+    return this.doReveal();
   }
 
   /**
    * Function to do the logic and animation of completing a hatch and revealing the Pokemon
    */
-  doReveal(): void {
+  doReveal(): Promise<number> {
     const isShiny = this.pokemon.isShiny();
     if (this.pokemon.species.subLegendary) {
       this.scene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
@@ -149,28 +145,26 @@ export class HEggHatchPhase extends Phase {
       this.scene.validateAchv(achvs.HATCH_SHINY);
     }
 
-    this.scene.time.delayedCall(Utils.fixedInt(10), () => {
-      this.eggsToHatchCount--;
-      this.eggHatchHandler.eventTarget.dispatchEvent(new EggCountChangedEvent(this.eggsToHatchCount));
+    return new Promise(resolve => {
+        this.eggsToHatchCount--;
 
-      if (isShiny) {
+        if (isShiny) {
+          const genderIndex = this.scene.gameData.gender ?? PlayerGender.MALE;
+          const genderStr = PlayerGender[genderIndex].toLowerCase();
+          (this.scene as any).textPlugin.showMsg(i18next.t(`achv:HATCH_SHINY.description`, { context: genderStr }))
+        }
 
-        const genderIndex = this.scene.gameData.gender ?? PlayerGender.MALE;
-        const genderStr = PlayerGender[genderIndex].toLowerCase();
-        (this.scene as any).textPlugin.showMsg(i18next.t(`achv:HATCH_SHINY.description`, { context: genderStr }))
-      }
-
-      this.scene.ui.showText(i18next.t("egg:hatchFromTheEgg", { pokemonName: getPokemonNameWithAffix(this.pokemon) }), null, () => {
-        this.scene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
-        this.scene.gameData.setPokemonCaught(this.pokemon, true, true).then(() => {
-          this.scene.gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex).then(() => {
-            this.scene.ui.showText("", 0);
-            this.end();
+        this.scene.ui.showText(i18next.t("egg:hatchFromTheEgg", { pokemonName: getPokemonNameWithAffix(this.pokemon) }), null, () => {
+          this.scene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
+          this.scene.gameData.setPokemonCaught(this.pokemon, true, true).then(() => {
+            this.scene.gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex).then(() => {
+              this.scene.ui.showText("", 0);
+              this.end();
+              resolve(1);
+            });
           });
-        });
-      }, null, true, 3000);
+        }, null, true, 3000);
     });
-
   }
 
   /**

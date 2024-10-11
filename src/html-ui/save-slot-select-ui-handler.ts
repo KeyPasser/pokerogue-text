@@ -1,4 +1,3 @@
-import { battle } from './../locales/zh_CN/battle';
 import i18next from "i18next";
 import BattleScene from "../battle-scene";
 import { Button } from "#enums/buttons";
@@ -9,12 +8,13 @@ import PokemonData from "../system/pokemon-data";
 import * as Utils from "../utils";
 import HUiHandler from "./PhaseUI/HUiHandler";
 import { SaveSlotSelectCallback, SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler.js";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 import { HTMLContainer } from "./Root";
 import { TextStyle } from "#app/ui/text.js";
 import { Mode } from "./UI";
 import './save-slot-select-ui-handler.scss'
 import { ConfirmDialog } from './widgets/confirmDialog';
+import * as modifiersModule from "../modifier/modifier";
 
 const sessionSlotCount = 5;
 
@@ -215,8 +215,6 @@ class SessionSlot extends HTMLContainer {
     });
 
     battleInfo.add(pokemonIconsContainer);
-
-    const modifiersModule = await import("../modifier/modifier");
 
     const modifierIconsContainer = new HTMLContainer();
     modifierIconsContainer.setScale(0.5);

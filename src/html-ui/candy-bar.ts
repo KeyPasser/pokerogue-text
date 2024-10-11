@@ -2,8 +2,7 @@ import BattleScene from "../battle-scene";
 import { Species } from "#enums/species";
 import {  HTMLContainer, HTMLObject } from "./Root";
 import i18next from "i18next";
-import { allSpecies } from "#app/data/pokemon-species";
-import TextBattleScene from "#app/text-battle-scene.js";
+import TextBattleScene from "#app/html-ui/text-battle-scene";
 
 export default class HCandyBar extends HTMLContainer {
 
