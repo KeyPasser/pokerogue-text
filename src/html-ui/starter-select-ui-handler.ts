@@ -2953,12 +2953,12 @@ export default class HStarterSelectUiHandler extends HUiHandler {
     let starterAttributes = this.starterPreferences[this.lastSpecies.speciesId];
 
     // this gets the correct pokemon cursor depending on whether you're in the starter screen or the party icons
-    if (1) {
-      starterContainer = this.filteredStarterContainers[this.cursor];
-    } else {
+    // if (1) {
+    //   starterContainer = this.filteredStarterContainers[this.cursor];
+    // } else {
       // if species is in filtered starters, get the starter container from the filtered starters, it can be undefined if the species is not in the filtered starters
       starterContainer = this.filteredStarterContainers[this.filteredStarterContainers.findIndex(container => container.species === this.lastSpecies)];
-    }
+    // }
 
     const [isDupe, removeIndex]: [boolean, number] = this.isInParty(this.lastSpecies); // checks to see if the pokemon is a duplicate; if it is, returns the index that will be removed
 

@@ -136,12 +136,14 @@ export default class TextBattleScene extends BattleScene {
     this.modifiers = [];
     this.enemyModifiers = [];
 
+    if(this.modifierBar)this.modifierBar.destroy();
     //@ts-ignore
     this.modifierBar = new HModifierBar(this);
     this.modifierBar.setName("modifier-bar");
     this.add.existing(this.modifierBar);
     //uiContainer.add(this.modifierBar);
 
+    if(this.enemyModifierBar)this.enemyModifierBar.destroy();
     //@ts-ignore
     this.enemyModifierBar = new HModifierBar(this, true);
     this.enemyModifierBar.setName("enemy-modifier-bar");

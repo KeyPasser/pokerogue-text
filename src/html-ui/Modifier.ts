@@ -15,7 +15,7 @@ const getHModifierIcon = (modifier: PersistentModifier, scene: BattleScene, forS
 class HModifierBar extends HTMLContainer {
   scene: BattleScene
   player: boolean = false;
-  private modifierCache: any[];
+  private turnInitHandler: any;
   constructor(scene: BattleScene, enemy: boolean = false) {
     super('100%', 'auto');
 
@@ -31,7 +31,7 @@ class HModifierBar extends HTMLContainer {
 
     //getRootContainer(scene).find(enemy?"#enemies":"#player-pokes").append(dom);
 
-    scene.eventTarget.addEventListener(BattleSceneEventType.TURN_INIT, () => {
+    scene.eventTarget.addEventListener(BattleSceneEventType.TURN_INIT, this.turnInitHandler=() => {
         this.outputModifiers(this.player?scene.modifiers:scene.enemyModifiers)
     })
   }
@@ -89,6 +89,11 @@ class HModifierBar extends HTMLContainer {
   removeAll(destroy = false){
     getRootContainer().findObject(this.player?"#player-modifiers":"#enemy-global-modifiers").setInnerHTML("");
     return super.removeAll(destroy);
+  }
+  override destroy(){
+    this.scene.eventTarget.removeEventListener(BattleSceneEventType.TURN_INIT, this.turnInitHandler);
+    this.removeAll(true);
+    super.destroy();
   }
 }
 
