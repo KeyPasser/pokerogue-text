@@ -1,4 +1,4 @@
-import type TextBattleScene from "#app/text-battle-scene.js";
+import type TextBattleScene from "#app/html-ui/text-battle-scene.js";
 import HTMLContainer from "./Root";
 
 function bbcodeToHtml(bbcode) {  
@@ -13,6 +13,7 @@ function bbcodeToHtml(bbcode) {
 class TextPlugin{
     useText:boolean = localStorage.getItem('textmode') == "true"
     scene:TextBattleScene;
+    msgsToShow: {msg:string,force:boolean}[] = [];
 
     constructor(scene:TextBattleScene){
         this.scene = scene
@@ -20,11 +21,6 @@ class TextPlugin{
     }
     increaseMsgCount(){
         this.count++;
-        const limit = 260
-        if(this.count >= limit+1){
-            this.count = limit;
-            document.querySelector("#msg-container .msg")?.remove();
-        }
     }
     showHTML(html: string, className: string = "") {
         const div = document.createElement("div");
@@ -84,6 +80,7 @@ class TextPlugin{
         dom?.remove();
     }
     showMsg(msg: string, forceNew = false){
+        this.msgsToShow.push({msg,force:forceNew});
         const container = this.container;
 
         if(this.reuseLastMsg&&!forceNew){
@@ -91,12 +88,18 @@ class TextPlugin{
             if(!last) return this.showMsg(msg,true);
             last.textContent = msg+"\n";
         }else{
-            const dom = document.createElement("div");
-            dom.classList.add('msg')
-            dom.textContent = msg+"\n";
-            document.querySelector("#msg-container")?.append(dom);
-    
-            this.increaseMsgCount();
+            if(this.count >= 260){
+                const dom = container.firstElementChild as HTMLDivElement;
+                container.append(dom);
+                dom.textContent = msg+"\n";
+            }else{
+                const dom = document.createElement("div");
+                dom.classList.add('msg')
+                dom.textContent = msg+"\n";
+                this.container?.append(dom);
+        
+                this.increaseMsgCount();
+            }
         }
 
         container.scrollTop = container.scrollHeight;
@@ -107,7 +110,7 @@ class TextPlugin{
             const dom = document.createElement("div");
             dom.classList.add('msg')
             dom.innerHTML = bbcodeToHtml(msg);
-            document.querySelector("#msg-container")?.append(dom);
+            this.container?.append(dom);
 
             this.increaseMsgCount();
         container.scrollTop = container.scrollHeight;
@@ -117,7 +120,7 @@ class TextPlugin{
             dom.classList.add('msg')
             dom.textContent = msg+"\n";
             dom.title = shadow;
-            document.querySelector("#msg-container")?.append(dom);
+            this.container?.append(dom);
     
             this.increaseMsgCount();
     }

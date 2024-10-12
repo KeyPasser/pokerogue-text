@@ -45,7 +45,7 @@ import { getPokeTypeColor } from './util';
 import { PlayerPokemon } from '#app/field/pokemon.js';
 
 export const IVKey = [
-  i18next.t("pokemonInfo:Stat.HPStat"),
+  i18next.t("pokemonInfo:Stat.HP"),
   i18next.t("pokemonInfo:Stat.ATK"),
   i18next.t("pokemonInfo:Stat.DEF"),
   i18next.t("pokemonInfo:Stat.SPATK"),

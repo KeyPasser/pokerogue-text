@@ -77,7 +77,7 @@ index 390a29f..042b923 100644
  </html>
 \ No newline at end of file
 diff --git a/package.json b/package.json
-index 3741801..0257d56 100644
+index 3741801..24e9a80 100644
 --- a/package.json
 +++ b/package.json
 @@ -5,8 +5,9 @@
@@ -91,7 +91,7 @@ index 3741801..0257d56 100644
  		"build:beta": "vite build --mode beta",
  		"preview": "vite preview",
  		"test": "vitest run --project pre && vitest run --project main",
-@@ -14,55 +15,47 @@
+@@ -14,55 +15,48 @@
  		"test:watch": "vitest run --project pre && vitest watch --project main --coverage",
  		"test:silent": "vitest run --project pre && vitest run --project main --silent",
  		"typecheck": "tsc --noEmit",
@@ -146,7 +146,8 @@ index 3741801..0257d56 100644
 -	"engines": {
 -		"node": ">=20.0.0"
 +		"phaser3-rex-plugins": "^1.1.84",
-+		"pokemon-rogue-battle": "file:"
++		"pokemon-rogue-battle": "file:",
++		"vite-plugin-css-injected-by-js": "^3.5.2"
  	},
  	"imports": {
  		"#enums/*": "./enums/*",
@@ -194,7 +195,7 @@ index 07525e9..de3003d 100644
        const moveIds = this.getMoveset().map(m => m!.getMove().id); // TODO: is this bang correct?
        Promise.allSettled(moveIds.map(m => initMoveAnim(this.scene, m)))
 diff --git a/src/main.ts b/src/main.ts
-index b5f813b..b48271b 100644
+index b5f813b..a5baf35 100644
 --- a/src/main.ts
 +++ b/src/main.ts
 @@ -1,12 +1,15 @@
@@ -337,7 +338,7 @@ index b5f813b..b48271b 100644
  Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative;
-@@ -87,23 +142,337 @@ Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative
+@@ -87,23 +142,335 @@ Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative
  Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
  Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
  
@@ -562,8 +563,6 @@ index b5f813b..b48271b 100644
 +
 +  textBS.preload()
 +  textBS.create()
-+
-+  textBS.launchBattle();
 +
 +  return textBS
 +}
@@ -825,23 +824,23 @@ index b3474be..13076a7 100644
    }
  
 diff --git a/src/utils.ts b/src/utils.ts
-index b029067..e131827 100644
+index b029067..e9aed63 100644
 --- a/src/utils.ts
 +++ b/src/utils.ts
-@@ -268,7 +268,7 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
- export const sessionIdKey = "pokerogue_sessionId";
- // Check if the current hostname is 'localhost' or an IP address, and ensure a port is specified
+@@ -270,7 +270,7 @@ export const sessionIdKey = "pokerogue_sessionId";
  export const isLocal = (
--  (window.location.hostname === "localhost" ||
-+  (window.location.hostname === "localhost" || 'keypasser.github.io' === window.location.hostname ||
+   (window.location.hostname === "localhost" ||
     /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname)) &&
-   window.location.port !== "") || window.location.hostname === "";
+-  window.location.port !== "") || window.location.hostname === "";
++  window.location.port !== "") || window.location.hostname === "keypasser.github.io";
+ 
+ export const localServerUrl = import.meta.env.VITE_SERVER_URL ?? `http://${window.location.hostname}:${window.location.port+1}`;
  
 diff --git a/vite.config.ts b/vite.config.ts
-index 946315c..6b447e5 100644
+index 946315c..61a6f16 100644
 --- a/vite.config.ts
 +++ b/vite.config.ts
-@@ -1,43 +1,152 @@
+@@ -1,43 +1,155 @@
 -import { defineConfig, loadEnv, Rollup, UserConfig } from 'vite';
 +import { defineConfig, loadEnv } from 'vite';
  import tsconfigPaths from 'vite-tsconfig-paths';
@@ -850,6 +849,7 @@ index 946315c..6b447e5 100644
 +import Busboy from 'busboy';
 +import { join } from 'path';
 +import { visualizer } from "rollup-plugin-visualizer";
++import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
  
 -export const defaultConfig: UserConfig  = {
 +function resolve(path: string) {
@@ -940,13 +940,16 @@ index 946315c..6b447e5 100644
 +		tsconfigPaths() as any,
 +		// minifyJsonPlugin(["images", "battle-anims"], true),
 +		savePlugin(),
-+		// visualizer({open: true})
++		cssInjectedByJsPlugin(),
++		// visualizer({open: true}),
  	],
  	clearScreen: false,
 -	appType: "mpa",
++	assetsInclude:["*.woff","*.woff2","*.ttf"],
  	build: {
 -		chunkSizeWarningLimit: 10000,
 -		minify: 'esbuild',
++		assetsInlineLimit:100*1024,
 +		minify: 'esbuild' as const,
  		sourcemap: false,
 -		rollupOptions: {
@@ -985,7 +988,6 @@ index 946315c..6b447e5 100644
 -
 +export default defineConfig(({ mode }) => {
 +	const envs = loadEnv(mode, process.cwd());
-+	console.log(envs.VITE_DEPLOY)
 +	const envPort = Number(envs.VITE_PORT);
 +	if(envs.VITE_MODE == "text"){
 +		defaultConfig.resolve.alias = {

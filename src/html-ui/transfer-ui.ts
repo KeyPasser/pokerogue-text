@@ -1,4 +1,3 @@
-import { pokemon } from './../locales/pt_BR/pokemon';
 import { PokemonHeldItemModifier } from "#app/modifier/modifier.js";
 import TextBattleScene from "#app/html-ui/text-battle-scene";
 import HUiHandler from "./PhaseUI/HUiHandler";
@@ -24,21 +23,6 @@ export default class TransferUI extends HUiHandler {
             this.dom.hide();
         }).setTitle(i18next.t("modifierSelectUiHandler:transfer")).setName("transfer-ui").setInnerHTML(`
             <div class="transfer-body">
-                <div class="pokemon-list">
-                    <div class="pokemon">
-                    </div>
-                    ${this.scene.getParty().map(pokemon => {
-                            return `
-                                <div class="pokemon">
-                                    ${pokemon.getNameToRender()}
-                                </div>
-                            `
-                     }).join('')
-                    }
-                    <div class="pokemon">
-                    </div>
-                </div>
-
                 <div class="modifiers">
                 </div>
             </div>
@@ -79,7 +63,20 @@ export default class TransferUI extends HUiHandler {
 
         this.init();
 
-        let html = '';
+        let html = ` 
+            <div class="modifier">
+                <div class="name">${i18next.t("battle:pokemon")}</div>
+                ${this.scene.getParty().map(pokemon => {
+                    return `
+                    <div class="pokemon">
+                    ${pokemon.getNameToRender()}
+                    </div>
+                    `
+                    }).join('')
+                }
+                <div class="buttons">
+                </div>
+            </div>`;
         Object.keys(modifierInfo).forEach(key => {
             const info = modifierInfo[key];
             const item = info.items.filter(i => i)[0]!;
@@ -194,7 +191,7 @@ export default class TransferUI extends HUiHandler {
                     }
 
                     dialog.hide();
-                    this.dom.findObject(`.modifiers .modifier:nth-child(${modifierIndex+1})`).setInnerHTML(`
+                    this.dom.findObject(`.modifiers .modifier:nth-child(${modifierIndex+2})`).setInnerHTML(`
                         <div class="modifier">
                         <div class="name">
                             ${cloneItem.type.name}

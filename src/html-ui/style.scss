@@ -77,7 +77,11 @@ body.textOnly {
     }
   }
 }
-
+body:not(.textOnly){
+  #appContainer{
+    width:100%;
+  }
+}
 .text-ui {
   display: flex;
   overflow: hidden;
